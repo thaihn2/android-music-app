@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public final class FragmentUtils {
 
-    public static boolean checkFragmentStackExist(String stack, AppCompatActivity context) {
+    public static boolean checkFragmentStackExist(AppCompatActivity context, String stack) {
         ArrayList<String> listFragmentStack = getAllFragmentStackName(context);
         for (int i = 0; i < listFragmentStack.size(); i++) {
             if (stack.equalsIgnoreCase(listFragmentStack.get(i))) {
@@ -44,10 +44,10 @@ public final class FragmentUtils {
     }
 
     public static void replaceFragment(
+            AppCompatActivity context,
             Fragment fragment,
             int idFrameLayout,
-            String stack,
-            AppCompatActivity context) {
+            String stack) {
         getFragmentTransaction(context)
                 .replace(idFrameLayout, fragment)
                 .addToBackStack(stack)
@@ -55,19 +55,19 @@ public final class FragmentUtils {
     }
 
     public static void replaceFragmentNotStack(
+            AppCompatActivity context,
             Fragment fragment,
-            int idFrameLayout,
-            AppCompatActivity context) {
+            int idFrameLayout) {
         getFragmentTransaction(context)
                 .replace(idFrameLayout, fragment)
                 .commit();
     }
 
     public static void addFragment(
+            AppCompatActivity context,
             Fragment fragment,
             int idFrameLayout,
-            String stack,
-            AppCompatActivity context) {
+            String stack) {
         getFragmentTransaction(context)
                 .add(idFrameLayout, fragment)
                 .addToBackStack(stack)
@@ -75,15 +75,15 @@ public final class FragmentUtils {
     }
 
     public static void addFragmentNotStack(
+            AppCompatActivity context,
             Fragment fragment,
-            int idFrameLayout,
-            AppCompatActivity context) {
+            int idFrameLayout) {
         getFragmentTransaction(context)
                 .add(idFrameLayout, fragment)
                 .commit();
     }
 
-    public static void popFragmentStack(String name, AppCompatActivity context) {
+    public static void popFragmentStack(AppCompatActivity context, String name) {
         getFragmentManager(context).popBackStack(name, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 
