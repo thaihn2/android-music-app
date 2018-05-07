@@ -5,4 +5,6 @@
     <color name="color_accent">#FF4081</color>
     <color name="color_persian_green">#009688</color>
     <color name="color_aqua_deep">#004D40</color>
+    <color name="color_black">#000000</color>
+    <color name="color_mine_shaft">#2A2828</color>
 </resources>

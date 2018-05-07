@@ -52,6 +52,11 @@ public class MainActivity extends BaseActivity implements
                 R.string.navigation_drawer_close);
         mDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+
+        FragmentUtils.replaceFragmentNotStack(
+                this,
+                HomeFragment.newInstance(),
+                R.id.frame_main);
     }
 
     @Override
@@ -65,7 +70,7 @@ public class MainActivity extends BaseActivity implements
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.search_main, menu);
+        getMenuInflater().inflate(R.menu.activity_main_search, menu);
         return true;
     }
 
