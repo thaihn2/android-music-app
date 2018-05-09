@@ -21,6 +21,11 @@ public class PersonalFragment extends BaseFragment {
         // Required empty public constructor
     }
 
+    public static PersonalFragment newInstance() {
+        PersonalFragment personalFragment = new PersonalFragment();
+        return personalFragment;
+    }
+
     @Override
     protected int getLayoutResource() {
         return R.layout.fragment_personal;
