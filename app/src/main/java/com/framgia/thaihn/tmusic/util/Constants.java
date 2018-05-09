@@ -11,7 +11,6 @@ public final class Constants {
 
     public static final int DEFAULT_LIMIT = 20;
     public static final int DEFAULT_OFFSET = 20;
-    public static final String GENRE_ALL_MUSIC = "all-music";
 
     private Constants() {
     }

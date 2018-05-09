@@ -8,12 +8,18 @@
     <dimen name="nav_header_height_avatar">100dp</dimen>
     <dimen name="nav_header_width_avatar">100dp</dimen>
     <dimen name="item_song_padding">12dp</dimen>
-    <dimen name="item_song_width">140dp</dimen>
-    <dimen name="item_song_avatar_width">120dp</dimen>
-    <dimen name="item_song_avatar_height">120dp</dimen>
+    <dimen name="item_song_width">130dp</dimen>
+    <dimen name="item_song_avatar_width">110dp</dimen>
+    <dimen name="item_song_avatar_height">110dp</dimen>
     <dimen name="item_song_margin_top">5dp</dimen>
     <dimen name="item_song_height_icon">24dp</dimen>
     <dimen name="item_song_width_icon">24dp</dimen>
-    <dimen name="item_song_text_size_name">17sp</dimen>
-    <dimen name="item_song_text_size_author">16sp</dimen>
+    <dimen name="item_song_text_size_name">16sp</dimen>
+    <dimen name="item_song_text_size_author">15sp</dimen>
+    <dimen name="item_genre_margin">10dp</dimen>
+    <dimen name="item_genre_elevation">5dp</dimen>
+
+    <dimen name="item_genre_corner">5dp</dimen>
+    <dimen name="item_genre_padding">12dp</dimen>
+    <dimen name="item_genre_text_size_title">25sp</dimen>
 </resources>
