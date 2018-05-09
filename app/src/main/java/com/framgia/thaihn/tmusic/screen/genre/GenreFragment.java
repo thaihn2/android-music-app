@@ -1,4 +1,4 @@
-package com.framgia.thaihn.tmusic.screen.main;
+package com.framgia.thaihn.tmusic.screen.genre;
 
 
 import android.app.Fragment;
@@ -12,6 +12,8 @@ import android.widget.Toast;
 
 import com.framgia.thaihn.tmusic.BaseFragment;
 import com.framgia.thaihn.tmusic.R;
+import com.framgia.thaihn.tmusic.data.model.Genre;
+import com.framgia.thaihn.tmusic.data.model.GenreSong;
 import com.framgia.thaihn.tmusic.data.model.Song;
 import com.framgia.thaihn.tmusic.util.Constants;
 import com.framgia.thaihn.tmusic.util.ToastUtils;
@@ -22,22 +24,23 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeFragment extends BaseFragment implements SongContract.View {
+public class GenreFragment extends BaseFragment implements SongContract.View,
+        GenreAdapter.OnClickListenerGenre {
 
     public static final String FRAGMENT_STACK_HOME = "HOME_FRAGMENT";
 
     private ProgressBar mProgressHome;
     private RecyclerView mRecycleAllMusic;
     private SongContract.Presenter mPresenter;
-    private SongsAdapter mSongAdapter;
+    private GenreAdapter mGenreAdapter;
 
-    public HomeFragment() {
+    public GenreFragment() {
         // Required empty public constructor
     }
 
-    public static HomeFragment newInstance() {
-        HomeFragment homeFragment = new HomeFragment();
-        return homeFragment;
+    public static GenreFragment newInstance() {
+        GenreFragment genreFragment = new GenreFragment();
+        return genreFragment;
     }
 
     @Override
@@ -56,7 +59,7 @@ public class HomeFragment extends BaseFragment implements SongContract.View {
         mPresenter = new SongPresenter();
         mPresenter.setView(this);
         configRecycle(getActivity());
-        mPresenter.loadMusic(Constants.GENRE_ALL_MUSIC, Constants.DEFAULT_LIMIT, Constants.DEFAULT_OFFSET);
+        mPresenter.loadAllMusic(Constants.DEFAULT_LIMIT, Constants.DEFAULT_OFFSET);
     }
 
     @Override
@@ -70,10 +73,10 @@ public class HomeFragment extends BaseFragment implements SongContract.View {
     }
 
     @Override
-    public void showData(List<Song> list) {
+    public void showData(int position, List<Song> list) {
         mRecycleAllMusic.setVisibility(View.VISIBLE);
-        mSongAdapter.setSongs(list);
-        mSongAdapter.notifyDataSetChanged();
+        mGenreAdapter.getGenres().add(new Genre(GenreSong.getGenres()[position], list));
+        mGenreAdapter.notifyItemInserted(position);
     }
 
     @Override
@@ -82,12 +85,27 @@ public class HomeFragment extends BaseFragment implements SongContract.View {
     }
 
     private void configRecycle(Context context) {
-        LinearLayoutManager layoutManager
-                = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(
+                context,
+                LinearLayoutManager.VERTICAL,
+                false);
         mRecycleAllMusic.setHasFixedSize(true);
-        mSongAdapter = new SongsAdapter(context, new ArrayList<Song>());
+        mGenreAdapter = new GenreAdapter(new ArrayList<Genre>());
+        mGenreAdapter.setOnClickListenerGenre(this);
         mRecycleAllMusic.setLayoutManager(layoutManager);
-        mRecycleAllMusic.setAdapter(mSongAdapter);
-        mSongAdapter.notifyDataSetChanged();
+        mRecycleAllMusic.setAdapter(mGenreAdapter);
+        mGenreAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onItemClicked(Song song, int position) {
+    }
+
+    @Override
+    public void onMoreClicked(Song song, int position) {
+    }
+
+    @Override
+    public void onGenreClicked(int positionGenre) {
     }
 }
