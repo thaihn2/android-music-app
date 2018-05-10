@@ -9,6 +9,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
@@ -16,6 +17,7 @@ import android.view.WindowManager;
 
 import com.framgia.thaihn.tmusic.BaseActivity;
 import com.framgia.thaihn.tmusic.R;
+import com.framgia.thaihn.tmusic.screen.genre.GenreFragment;
 import com.framgia.thaihn.tmusic.util.FragmentUtils;
 
 public class MainActivity extends BaseActivity implements
@@ -25,6 +27,7 @@ public class MainActivity extends BaseActivity implements
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
+    private BottomNavigationView mBottomTabMain;
 
     @Override
     protected int getLayoutResources() {
@@ -36,7 +39,9 @@ public class MainActivity extends BaseActivity implements
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mBottomTabMain = findViewById(R.id.bottom_navigation);
         mNavigationView.setNavigationItemSelectedListener(this);
+        mBottomTabMain.setOnNavigationItemSelectedListener(this);
     }
 
     @Override
@@ -52,11 +57,18 @@ public class MainActivity extends BaseActivity implements
                 R.string.navigation_drawer_close);
         mDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+        mBottomTabMain.setSelectedItemId(R.id.menu_home);
+        switchTab(mBottomTabMain.getSelectedItemId());
+    }
 
-        FragmentUtils.replaceFragmentNotStack(
-                this,
-                HomeFragment.newInstance(),
-                R.id.frame_main);
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 
     @Override
@@ -78,7 +90,6 @@ public class MainActivity extends BaseActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_search: {
-                // TODO show fragment search
                 break;
             }
         }
@@ -88,26 +99,41 @@ public class MainActivity extends BaseActivity implements
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+        switchTab(item.getItemId());
+        mDrawerLayout.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            onBackPressed();
+        }
+        return true;
+    }
+
+    /**
+     * Switch tab
+     *
+     * @param id
+     */
+    private void switchTab(int id) {
+        switch (id) {
             case R.id.menu_home: {
-                FragmentUtils.replaceFragment(
+                FragmentUtils.replaceFragmentNotStack(
                         this,
-                        new HomeFragment(),
-                        R.id.frame_main,
-                        HomeFragment.FRAGMENT_STACK_HOME);
+                        GenreFragment.newInstance(),
+                        R.id.frame_main);
                 break;
             }
             case R.id.menu_personal: {
-                FragmentUtils.replaceFragment(
+                FragmentUtils.replaceFragmentNotStack(
                         this,
-                        new PersonalFragment(),
-                        R.id.frame_main,
-                        PersonalFragment.FRAGMENT_STACK_PERSONAL);
+                        PersonalFragment.newInstance(),
+                        R.id.frame_main);
                 break;
             }
         }
-        mDrawerLayout.closeDrawer(GravityCompat.START);
-        return true;
     }
 
     /**
