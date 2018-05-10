@@ -3,6 +3,7 @@ package com.framgia.thaihn.tmusic.screen.genre;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +16,7 @@ import com.framgia.thaihn.tmusic.R;
 import com.framgia.thaihn.tmusic.data.model.Genre;
 import com.framgia.thaihn.tmusic.data.model.GenreSong;
 import com.framgia.thaihn.tmusic.data.model.Song;
+import com.framgia.thaihn.tmusic.screen.detail.DetailActivity;
 import com.framgia.thaihn.tmusic.util.Constants;
 import com.framgia.thaihn.tmusic.util.ToastUtils;
 
@@ -26,8 +28,6 @@ import java.util.List;
  */
 public class GenreFragment extends BaseFragment implements SongContract.View,
         GenreAdapter.OnClickListenerGenre {
-
-    public static final String FRAGMENT_STACK_HOME = "HOME_FRAGMENT";
 
     private ProgressBar mProgressHome;
     private RecyclerView mRecycleAllMusic;
@@ -99,6 +99,8 @@ public class GenreFragment extends BaseFragment implements SongContract.View,
 
     @Override
     public void onItemClicked(Song song, int position) {
+        Intent intent = new Intent(getContext(), DetailActivity.class);
+        startActivity(intent);
     }
 
     @Override
