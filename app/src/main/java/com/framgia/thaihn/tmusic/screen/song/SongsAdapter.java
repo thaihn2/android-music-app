@@ -63,6 +63,7 @@ public class SongsAdapter
             mIconMore = rootView.findViewById(R.id.image_icon_more);
             mIconMore.setOnClickListener(this);
             itemView.setOnClickListener(this);
+            mTextNameSong.setSelected(true);
         }
 
         public void setData(Song song) {

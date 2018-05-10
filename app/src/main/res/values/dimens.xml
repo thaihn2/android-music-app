@@ -7,6 +7,7 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="nav_header_height_avatar">100dp</dimen>
     <dimen name="nav_header_width_avatar">100dp</dimen>
+
     <dimen name="item_song_padding">12dp</dimen>
     <dimen name="item_song_width">130dp</dimen>
     <dimen name="item_song_avatar_width">110dp</dimen>
@@ -15,11 +16,27 @@
     <dimen name="item_song_height_icon">24dp</dimen>
     <dimen name="item_song_width_icon">24dp</dimen>
     <dimen name="item_song_text_size_name">16sp</dimen>
-    <dimen name="item_song_text_size_author">15sp</dimen>
+    <dimen name="item_song_text_size_singer">15sp</dimen>
+
     <dimen name="item_genre_margin">10dp</dimen>
     <dimen name="item_genre_elevation">5dp</dimen>
-
     <dimen name="item_genre_corner">5dp</dimen>
     <dimen name="item_genre_padding">12dp</dimen>
     <dimen name="item_genre_text_size_title">25sp</dimen>
+
+    <dimen name="detail_width_image">200dp</dimen>
+    <dimen name="detail_margin_left">24dp</dimen>
+    <dimen name="detail_margin_top">16dp</dimen>
+    <dimen name="detail_width_icon">48dp</dimen>
+    <dimen name="detail_padding_image">10dp</dimen>
+    <dimen name="detail_margin_bottom">16dp</dimen>
+    <dimen name="detail_padding_image_back">16dp</dimen>
+
+    <dimen name="smart_player_padding_left">10dp</dimen>
+    <dimen name="smart_key_width_icon">36dp</dimen>
+    <dimen name="detail_text_size_time">15sp</dimen>
+    <dimen name="smart_key_width_image">55dp</dimen>
+    <dimen name="smart_key_padding_image">6dp</dimen>
+    <dimen name="details_margin_right">10dp</dimen>
+    <dimen name="detail_margin_top_5dp">5dp</dimen>
 </resources>
