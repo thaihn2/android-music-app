@@ -36,7 +36,9 @@
     <dimen name="smart_key_width_icon">36dp</dimen>
     <dimen name="detail_text_size_time">15sp</dimen>
     <dimen name="smart_key_width_image">55dp</dimen>
-    <dimen name="smart_key_padding_image">6dp</dimen>
+    <dimen name="smart_key_padding_image">8dp</dimen>
     <dimen name="details_margin_right">10dp</dimen>
     <dimen name="detail_margin_top_5dp">5dp</dimen>
+    <dimen name="detail_margin_left_image_avatar">32dp</dimen>
+    <dimen name="smart_player_margin_right">10dp</dimen>
 </resources>
