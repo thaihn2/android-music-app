@@ -6,7 +6,7 @@ import com.framgia.thaihn.tmusic.data.model.Song;
 
 import java.util.List;
 
-public interface SongContract {
+public interface GenreContract {
 
     interface View extends BaseView {
 
@@ -19,7 +19,7 @@ public interface SongContract {
         void showError(String message);
     }
 
-    interface Presenter extends BasePresenter<SongContract.View> {
+    interface Presenter extends BasePresenter<GenreContract.View> {
         void loadMusic(int position, int limit, int offset);
 
         void loadAllMusic(int limit, int offset);

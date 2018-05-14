@@ -36,7 +36,7 @@ public class SongsAdapter
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View layoutItem = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_song, parent, false);
-        return new ItemViewHolder(layoutItem);
+        return new ItemViewHolder(layoutItem, mOnClickListenerSong);
     }
 
     @Override
@@ -49,18 +49,19 @@ public class SongsAdapter
         return mSongs != null ? mSongs.size() : 0;
     }
 
-    class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    static class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private Song song;
         private ImageView mAvatarSong, mIconMore;
         private TextView mTextNameSong, mTextSingerSong;
+        private OnClickListenerSong mClickListenerSong;
 
-        ItemViewHolder(View rootView) {
+        ItemViewHolder(View rootView, OnClickListenerSong listener) {
             super(rootView);
             mAvatarSong = rootView.findViewById(R.id.image_avatar);
             mTextNameSong = rootView.findViewById(R.id.text_name);
             mTextSingerSong = rootView.findViewById(R.id.text_singer);
             mIconMore = rootView.findViewById(R.id.image_icon_more);
+            mClickListenerSong = listener;
             mIconMore.setOnClickListener(this);
             itemView.setOnClickListener(this);
             mTextNameSong.setSelected(true);
@@ -68,7 +69,6 @@ public class SongsAdapter
 
         public void setData(Song song) {
             if (song != null) {
-                this.song = song;
                 RequestOptions options = new RequestOptions()
                         .centerCrop()
                         .placeholder(R.drawable.ic_loading)
@@ -87,9 +87,9 @@ public class SongsAdapter
         @Override
         public void onClick(View v) {
             if (v == itemView) {
-                mOnClickListenerSong.onItemClicked(song, getAdapterPosition());
+                mClickListenerSong.onItemClicked(getAdapterPosition());
             } else if (v == mIconMore) {
-                mOnClickListenerSong.onMoreClicked(song, getAdapterPosition());
+                mClickListenerSong.onMoreClicked(getAdapterPosition());
             }
         }
     }
@@ -105,8 +105,8 @@ public class SongsAdapter
     }
 
     public interface OnClickListenerSong {
-        void onMoreClicked(Song song, int position);
+        void onMoreClicked(int position);
 
-        void onItemClicked(Song song, int position);
+        void onItemClicked(int position);
     }
 }

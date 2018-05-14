@@ -1,8 +1,13 @@
 package com.framgia.thaihn.tmusic.screen.main;
 
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,17 +22,25 @@ import android.view.WindowManager;
 
 import com.framgia.thaihn.tmusic.BaseActivity;
 import com.framgia.thaihn.tmusic.R;
+import com.framgia.thaihn.tmusic.data.model.Song;
 import com.framgia.thaihn.tmusic.screen.genre.GenreFragment;
+import com.framgia.thaihn.tmusic.service.MusicService;
 import com.framgia.thaihn.tmusic.util.FragmentUtils;
 
 public class MainActivity extends BaseActivity implements
         NavigationView.OnNavigationItemSelectedListener,
-        BottomNavigationView.OnNavigationItemSelectedListener {
+        BottomNavigationView.OnNavigationItemSelectedListener,
+        GenreFragment.OnItemSongListener {
 
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
     private BottomNavigationView mBottomTabMain;
+    private MusicService mMusicService;
+    private boolean mMusicBound = false;
+    private Intent mIntent;
+    private GenreFragment mGenreFragment;
+    private PersonalFragment mPersonalFragment;
 
     @Override
     protected int getLayoutResources() {
@@ -57,19 +70,48 @@ public class MainActivity extends BaseActivity implements
                 R.string.navigation_drawer_close);
         mDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+        // init fragment
+        mGenreFragment = GenreFragment.newInstance();
+        mPersonalFragment = PersonalFragment.newInstance();
+        mGenreFragment.setOnItemSongListener(this);
         mBottomTabMain.setSelectedItemId(R.id.menu_home);
         switchTab(mBottomTabMain.getSelectedItemId());
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        if (mIntent == null) {
+            mIntent = new Intent(this, MusicService.class);
+        }
+        bindService(mIntent, mConnection, Context.BIND_AUTO_CREATE);
+        startService(mIntent);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+        if (mMusicBound) {
+            unbindService(mConnection);
+            mMusicBound = false;
+        }
     }
+
+    private ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            MusicService.MusicBinder binder = (MusicService.MusicBinder) service;
+            mMusicService = binder.getService();
+            mMusicBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mMusicService = null;
+            mMusicBound = false;
+        }
+    };
 
     @Override
     public void onBackPressed() {
@@ -122,14 +164,14 @@ public class MainActivity extends BaseActivity implements
             case R.id.menu_home: {
                 FragmentUtils.replaceFragmentNotStack(
                         this,
-                        GenreFragment.newInstance(),
+                        mGenreFragment,
                         R.id.frame_main);
                 break;
             }
             case R.id.menu_personal: {
                 FragmentUtils.replaceFragmentNotStack(
                         this,
-                        PersonalFragment.newInstance(),
+                        mPersonalFragment,
                         R.id.frame_main);
                 break;
             }

@@ -6,14 +6,14 @@ import com.framgia.thaihn.tmusic.data.source.SongDataSource;
 
 import java.util.List;
 
-public class SongPresenter implements SongContract.Presenter,
+public class GenrePresenter implements GenreContract.Presenter,
         SongDataSource.OnFetchDataListener<Song> {
 
-    private SongContract.View mView;
+    private GenreContract.View mView;
     private SongRepository mSongRepository;
 
 
-    public SongPresenter() {
+    public GenrePresenter() {
         mSongRepository = SongRepository.getInstace();
     }
 
@@ -29,7 +29,7 @@ public class SongPresenter implements SongContract.Presenter,
     }
 
     @Override
-    public void setView(SongContract.View view) {
+    public void setView(GenreContract.View view) {
         this.mView = view;
     }
 

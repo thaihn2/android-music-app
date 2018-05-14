@@ -12,20 +12,13 @@ import com.framgia.thaihn.tmusic.util.Utils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
 public class MusicManager implements MediaPlayer.OnPreparedListener,
         MediaPlayer.OnCompletionListener {
 
     private MediaPlayer mMediaPlayer;
-    private ExecutorService mExecutorService;
-    private ScheduledExecutorService mScheduledExecutorService;
     private List<Song> mSongs;
     private int mCurrentPosition;
-    private int mCurrentDuration;
     private MusicService mMusicService;
     @StateManager.StateLoop
     private int mLoopType = StateManager.LOOP_DISABLE;
@@ -47,22 +40,12 @@ public class MusicManager implements MediaPlayer.OnPreparedListener,
         if (mMediaPlayer == null) return;
         if (mState == StateManager.PLAYING) {
             pause();
-            mCurrentDuration = mMediaPlayer.getCurrentPosition();
             mState = StateManager.PAUSE;
             mServiceListener.eventPause();
         } else {
             mMediaPlayer.start();
             mState = StateManager.PLAYING;
             mServiceListener.eventPlay();
-        }
-    }
-
-    public void startUpdateSeekbar() {
-        if (mExecutorService == null) {
-            mExecutorService = Executors.newCachedThreadPool();
-        }
-        if (mScheduledExecutorService == null) {
-            mScheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
         }
     }
 
