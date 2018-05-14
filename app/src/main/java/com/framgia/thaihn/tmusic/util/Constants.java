@@ -13,6 +13,7 @@ public final class Constants {
     public static final int DEFAULT_LIMIT = 20;
     public static final int DEFAULT_OFFSET = 20;
     public static final int DEFAULT_MAX_SEEK_BAR = 100;
+    public static final int DEFAULT_TIME_UPDATE_SEEK_BAR = 1000;
 
     public static final String BUNDLE_LIST_MUSIC_PLAY = "LIST_MUSIC_PLAY";
     public static final String BUNDLE_POSITION_SONG = "POSITION_SONG";
