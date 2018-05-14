@@ -3,6 +3,7 @@ package com.framgia.thaihn.tmusic.util.music;
 public interface MediaListener {
 
     interface ServiceListener {
+
         void eventPause();
 
         void eventPlay();
@@ -18,5 +19,9 @@ public interface MediaListener {
         void eventNextFail(String message);
 
         void eventPlayExit();
+
+        void updateSeekBar();
+
+        void removeUpdateSeekBar();
     }
 }

@@ -89,6 +89,11 @@ public class MusicService extends Service implements MediaListener.ServiceListen
         return mMusicManager == null ? null : mMusicManager.getCurrentPosition();
     }
 
+    public int getCurrentDuration() {
+        if (mMusicManager == null) return Constants.ERROR_DURATION;
+        return mMusicManager.getCurrentDuration();
+    }
+
     public List<Song> getSongs() {
         if (mMusicManager == null) return null;
         return mMusicManager.getSongs();
@@ -140,6 +145,18 @@ public class MusicService extends Service implements MediaListener.ServiceListen
     public void eventPlayExit() {
         if (mServiceListener == null) return;
         mServiceListener.eventPlayExit();
+    }
+
+    @Override
+    public void updateSeekBar() {
+        if (mServiceListener == null) return;
+        mServiceListener.updateSeekBar();
+    }
+
+    @Override
+    public void removeUpdateSeekBar() {
+        if (mServiceListener == null) return;
+        mServiceListener.removeUpdateSeekBar();
     }
 
     @Override

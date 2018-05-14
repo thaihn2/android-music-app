@@ -29,10 +29,17 @@ import com.framgia.thaihn.tmusic.util.Utils;
 import com.framgia.thaihn.tmusic.util.music.MediaListener;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class DetailActivity extends BaseActivity
         implements View.OnClickListener,
         MediaListener.ServiceListener, SeekBar.OnSeekBarChangeListener {
+
+    public static final int INIT_DELAY_EXECUTOR = 0;
+    public static final int PERIOD_EXECUTOR = 1;
 
     private List<Song> mSongs;
     private int mPosition;
@@ -41,7 +48,8 @@ public class DetailActivity extends BaseActivity
     private boolean mSeekByUser;
     private Intent mIntent;
     private int mCurrentProgress;
-
+    private ExecutorService mExecutorService;
+    private ScheduledExecutorService mScheduledExecutorService;
 
     private ImageView mImageAvatar, mImageLike, mImageDownload, mImageShare,
             mImageRandom, mImagePrevious, mImagePlay, mImageNext, mImageLoop;
@@ -126,7 +134,6 @@ public class DetailActivity extends BaseActivity
             mIntent = new Intent(this, MusicService.class);
         }
         bindService(mIntent, mConnection, Context.BIND_AUTO_CREATE);
-        startService(mIntent);
     }
 
     @Override
@@ -141,6 +148,7 @@ public class DetailActivity extends BaseActivity
     @Override
     public void eventPause() {
         mImagePlay.setImageDrawable(getResources().getDrawable(R.drawable.ic_media_play_symbol_white));
+        removeProgressUpdate();
     }
 
     @Override
@@ -185,6 +193,18 @@ public class DetailActivity extends BaseActivity
     public void eventPlayExit() {
     }
 
+    @Override
+    public void updateSeekBar() {
+        startProgressUpdate();
+    }
+
+    @Override
+    public void removeUpdateSeekBar() {
+        removeProgressUpdate();
+        mSeekbarPlay.setProgress(0);
+    }
+
+
     /**
      * Create bound service to connect and control service
      */
@@ -196,7 +216,9 @@ public class DetailActivity extends BaseActivity
             mMusicService.setServiceListener(DetailActivity.this);
             mPosition = mMusicService.getCurrentPosition();
             mSongs = mMusicService.getSongs();
-            loadUi(mSongs.get(mPosition));
+            if (mSongs != null) {
+                loadUi(mSongs.get(mPosition));
+            }
             mMusicBound = true;
         }
 
@@ -227,6 +249,9 @@ public class DetailActivity extends BaseActivity
         }
     }
 
+    /**
+     * Check download
+     */
     private void checkDownload() {
         if (mMusicService != null) {
             if (mSongs.get(mPosition).isDownloadable()) {
@@ -283,5 +308,54 @@ public class DetailActivity extends BaseActivity
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(getResources().getColor(R.color.color_chocolate));
         }
+    }
+
+    /**
+     * User ScheduleExecutorService to create schedule call again in one second
+     * Better than user Thread
+     */
+    private void startProgressUpdate() {
+        if (mExecutorService == null) {
+            mExecutorService = Executors.newCachedThreadPool();
+        }
+        if (mScheduledExecutorService == null) {
+            mScheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+        }
+        mScheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
+                mExecutorService.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        calculatorProgress();
+                    }
+                });
+            }
+        }, INIT_DELAY_EXECUTOR, PERIOD_EXECUTOR, TimeUnit.SECONDS);
+    }
+
+    private void calculatorProgress() {
+        if (mMusicService == null) return;
+        if (mSeekByUser) return;
+        int currentDuration = mMusicService.getCurrentDuration();
+        double progress = (double) currentDuration / mSongs.get(mPosition).getDuration()
+                * Constants.DEFAULT_MAX_SEEK_BAR;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            // Su dung hoat canh dong giua hien tai va muc tieu
+            mSeekbarPlay.setProgress((int) progress, true);
+        } else {
+            mSeekbarPlay.setProgress((int) progress);
+        }
+        long time = (long) (mSongs.get(mPosition).getDuration() /
+                Constants.DEFAULT_MAX_SEEK_BAR * progress);
+        mTextTimeProgress.setText(Utils.calculatorDuration(time));
+    }
+
+    private void removeProgressUpdate() {
+        if (mExecutorService == null) return;
+
+        mExecutorService.shutdownNow();
+        mExecutorService = null;
+        mScheduledExecutorService = null;
     }
 }

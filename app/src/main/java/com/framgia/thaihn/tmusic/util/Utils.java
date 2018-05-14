@@ -28,14 +28,14 @@ public final class Utils {
                 BuildConfig.API_KEY, Constants.LIMIT, limit, Constants.OFFSET, offset);
     }
 
-    public static String calculatorDuration(int duration) {
+    public static String calculatorDuration(long duration) {
         int hours = (int) (duration / (1000 * 60 * 60));
         int minutes = (int) (duration % (1000 * 60 * 60)) / (1000 * 60);
         int seconds = (int) ((duration % (1000 * 60 * 60)) % (1000 * 60) / 1000);
         if (hours > 0) {
-            return String.format("%d02:%d02%:%d02", hours, minutes, seconds);
+            return String.format("%02d:%02d:%02d", hours, minutes, seconds);
         } else {
-            return String.format("%d02:%d02", minutes, seconds);
+            return String.format("%02d:%02d", minutes, seconds);
         }
     }
 
