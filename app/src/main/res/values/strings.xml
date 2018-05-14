@@ -9,4 +9,8 @@
     <string name="title_tab_home">Home</string>
     <string name="title_tab_personal">Personal</string>
     <string name="time_default">00:00</string>
+    <string name="error_first_of_list_song">You\'re first of list</string>
+    <string name="error_end_of_list_song">You\'re end of list</string>
+    <string name="error_can_not_load_list_song">Can\'t load your list song</string>
+    <string name="str_can_not_download">The song can\'t not download</string>
 </resources>

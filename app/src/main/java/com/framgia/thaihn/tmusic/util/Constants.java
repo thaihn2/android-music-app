@@ -7,10 +7,18 @@ public final class Constants {
     public static final String LIMIT = "limit";
     public static final String OFFSET = "offset";
     public static final String CLIENT_ID = "client_id";
+    public static final String STREAM = "stream";
     public static final String METHOD_GET = "GET";
 
     public static final int DEFAULT_LIMIT = 20;
     public static final int DEFAULT_OFFSET = 20;
+    public static final int DEFAULT_MAX_SEEK_BAR = 100;
+
+    public static final String BUNDLE_LIST_MUSIC_PLAY = "LIST_MUSIC_PLAY";
+    public static final String BUNDLE_POSITION_SONG = "POSITION_SONG";
+
+    public static final String IMAGE_SIZE_ORIGIN = "original";
+    public static final String IMAGE_SIZE_LARGE = "large";
 
     private Constants() {
     }
