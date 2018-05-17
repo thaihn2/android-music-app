@@ -8,8 +8,8 @@
 
     <com.framgia.thaihn.tmusic.widget.CircleImageView
         android:id="@+id/image_avatar_small"
-        android:layout_width="@dimen/smart_key_width_image"
-        android:layout_height="@dimen/smart_key_width_image"
+        android:layout_width="?actionBarSize"
+        android:layout_height="?actionBarSize"
         android:src="@drawable/ic_loading"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"

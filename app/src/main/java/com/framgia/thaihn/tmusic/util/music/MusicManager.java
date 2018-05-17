@@ -22,6 +22,7 @@ public class MusicManager implements MediaPlayer.OnPreparedListener,
     private MusicService mMusicService;
     @StateManager.StateLoop
     private int mLoopType = StateManager.LOOP_DISABLE;
+    @StateManager.StatePlay
     private int mState = StateManager.PREPARE;
     private MediaListener.ServiceListener mServiceListener;
 
@@ -62,10 +63,9 @@ public class MusicManager implements MediaPlayer.OnPreparedListener,
                     mMusicService.getString(R.string.error_can_not_load_list_song));
             return;
         }
-        // check current song playing, if isPlaying not do something and return
-        if (mSongs.size() != 0 && songs.size() != 0) {
-            if (songs.get(position).getId() == mSongs.get(mCurrentPosition).getId()) {
-                mServiceListener.eventPlayExit();
+        // song is playing
+        if (mSongs != null && mSongs.size() != 0) {
+            if (mSongs.get(mCurrentPosition).getId() == songs.get(position).getId()) {
                 return;
             }
         }
@@ -129,6 +129,7 @@ public class MusicManager implements MediaPlayer.OnPreparedListener,
         }
         reset();
         // update progress
+        mServiceListener.removeUpdateSeekBar();
         setState(StateManager.PREPARE);
         loadSong();
     }
@@ -173,16 +174,20 @@ public class MusicManager implements MediaPlayer.OnPreparedListener,
         mState = state;
     }
 
+    public int getCurrentDuration() {
+        if (mMediaPlayer == null) return Constants.ERROR_DURATION;
+        return mMediaPlayer.getCurrentPosition();
+    }
+
     @Override
     public void onPrepared(MediaPlayer mp) {
         mMediaPlayer.start();
+        mServiceListener.updateSeekBar();
         mServiceListener.eventPlay();
-        // TODO updating progressbar when play
     }
 
     @Override
     public void onCompletion(MediaPlayer mp) {
-        // TODO play done. check loop when check music
         switch (mLoopType) {
             case StateManager.LOOP_DISABLE: {
                 // play next music
