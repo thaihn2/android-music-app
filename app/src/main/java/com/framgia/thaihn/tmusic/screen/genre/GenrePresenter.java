@@ -14,7 +14,7 @@ public class GenrePresenter implements GenreContract.Presenter,
 
 
     public GenrePresenter() {
-        mSongRepository = SongRepository.getInstace();
+        mSongRepository = SongRepository.getInstance();
     }
 
     @Override
@@ -39,7 +39,6 @@ public class GenrePresenter implements GenreContract.Presenter,
 
     @Override
     public void onStop() {
-
     }
 
     @Override

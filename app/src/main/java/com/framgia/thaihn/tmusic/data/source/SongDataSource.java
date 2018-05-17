@@ -22,4 +22,17 @@ public interface SongDataSource {
 
         void onFetchDataError(String message);
     }
+
+    interface LocalDataSource {
+        void getAllSongLocal(
+                SongDataSource.OnGetDataLocalListener<Song> listener);
+
+        void getSongDownload();
+    }
+
+    interface OnGetDataLocalListener<T> {
+        void onGetDataLocalSuccess(List<T> list);
+
+        void onGetDataLocalError(String message);
+    }
 }

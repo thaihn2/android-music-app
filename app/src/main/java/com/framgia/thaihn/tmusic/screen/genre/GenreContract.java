@@ -17,6 +17,7 @@ public interface GenreContract {
         void showData(int position, List<Song> list);
 
         void showError(String message);
+
     }
 
     interface Presenter extends BasePresenter<GenreContract.View> {

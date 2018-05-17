@@ -35,9 +35,14 @@
     <dimen name="smart_player_padding_left">10dp</dimen>
     <dimen name="smart_key_width_icon">36dp</dimen>
     <dimen name="detail_text_size_time">15sp</dimen>
-    <dimen name="smart_key_padding_image">8dp</dimen>
+    <dimen name="smart_key_padding_image">5dp</dimen>
     <dimen name="details_margin_right">10dp</dimen>
     <dimen name="detail_margin_top_5dp">5dp</dimen>
     <dimen name="detail_margin_left_image_avatar">32dp</dimen>
     <dimen name="smart_player_margin_right">10dp</dimen>
+    <dimen name="item_song_offline_width_icon_more">42dp</dimen>
+    <dimen name="item_song_offline_padding_icon_more">6dp</dimen>
+    <dimen name="item_song_offline_padding">8dp</dimen>
+    <dimen name="item_song_offline_width_image">60dp</dimen>
+    <dimen name="item_song_offline_padding_image">5dp</dimen>
 </resources>

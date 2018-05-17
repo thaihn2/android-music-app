@@ -22,8 +22,8 @@ import android.view.WindowManager;
 
 import com.framgia.thaihn.tmusic.BaseActivity;
 import com.framgia.thaihn.tmusic.R;
-import com.framgia.thaihn.tmusic.data.model.Song;
 import com.framgia.thaihn.tmusic.screen.genre.GenreFragment;
+import com.framgia.thaihn.tmusic.screen.personal.PersonalFragment;
 import com.framgia.thaihn.tmusic.service.MusicService;
 import com.framgia.thaihn.tmusic.util.FragmentUtils;
 

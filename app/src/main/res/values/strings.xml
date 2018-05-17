@@ -13,4 +13,6 @@
     <string name="error_end_of_list_song">You\'re end of list</string>
     <string name="error_can_not_load_list_song">Can\'t load your list song</string>
     <string name="str_can_not_download">The song can\'t not download</string>
+    <string name="error_can_not_load_song_offline">Can\'t load music from SD-Card</string>
+    <string name="error_get_song_from_sd_card">Can\'t get song from SD Card</string>
 </resources>
