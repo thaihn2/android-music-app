@@ -41,11 +41,11 @@ public class MusicManager implements MediaPlayer.OnPreparedListener,
         if (mMediaPlayer == null) return;
         if (mState == StateManager.PLAYING) {
             pause();
-            mState = StateManager.PAUSE;
+            setState(StateManager.PAUSE);
             mServiceListener.eventPause();
         } else {
             mMediaPlayer.start();
-            mState = StateManager.PLAYING;
+            setState(StateManager.PLAYING);
             mServiceListener.eventPlay();
         }
     }
@@ -129,7 +129,9 @@ public class MusicManager implements MediaPlayer.OnPreparedListener,
         }
         reset();
         // update progress
-        mServiceListener.removeUpdateSeekBar();
+        if (mServiceListener != null) {
+            mServiceListener.removeUpdateSeekBar();
+        }
         setState(StateManager.PREPARE);
         loadSong();
     }
@@ -154,10 +156,6 @@ public class MusicManager implements MediaPlayer.OnPreparedListener,
         return mSongs;
     }
 
-    public void setSongs(List<Song> songs) {
-        mSongs = songs;
-    }
-
     public int getState() {
         return mState;
     }
@@ -168,6 +166,10 @@ public class MusicManager implements MediaPlayer.OnPreparedListener,
 
     public void setLoopType(@StateManager.StateLoop int loopType) {
         mLoopType = loopType;
+    }
+
+    public int getLoopType() {
+        return mLoopType;
     }
 
     public void setState(@StateManager.StatePlay int state) {
@@ -182,6 +184,7 @@ public class MusicManager implements MediaPlayer.OnPreparedListener,
     @Override
     public void onPrepared(MediaPlayer mp) {
         mMediaPlayer.start();
+        setState(StateManager.PLAYING);
         mServiceListener.updateSeekBar();
         mServiceListener.eventPlay();
     }
@@ -191,6 +194,7 @@ public class MusicManager implements MediaPlayer.OnPreparedListener,
         switch (mLoopType) {
             case StateManager.LOOP_DISABLE: {
                 // play next music
+                playNextSong();
                 break;
             }
             case StateManager.LOOP_ONE: {

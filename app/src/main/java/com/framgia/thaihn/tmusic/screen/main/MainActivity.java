@@ -17,30 +17,52 @@ import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.framgia.thaihn.tmusic.BaseActivity;
 import com.framgia.thaihn.tmusic.R;
+import com.framgia.thaihn.tmusic.data.model.Song;
+import com.framgia.thaihn.tmusic.screen.detail.DetailActivity;
 import com.framgia.thaihn.tmusic.screen.genre.GenreFragment;
 import com.framgia.thaihn.tmusic.screen.personal.PersonalFragment;
 import com.framgia.thaihn.tmusic.service.MusicService;
 import com.framgia.thaihn.tmusic.util.FragmentUtils;
+import com.framgia.thaihn.tmusic.util.ToastUtils;
+import com.framgia.thaihn.tmusic.util.music.MediaListener;
+import com.framgia.thaihn.tmusic.util.music.StateManager;
+import com.framgia.thaihn.tmusic.widget.CircleImageView;
+
+import java.util.List;
 
 public class MainActivity extends BaseActivity implements
         NavigationView.OnNavigationItemSelectedListener,
         BottomNavigationView.OnNavigationItemSelectedListener,
-        GenreFragment.OnItemSongListener {
+        GenreFragment.OnItemSongListener,
+        View.OnClickListener, MediaListener.ServiceListener {
 
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
     private BottomNavigationView mBottomTabMain;
+    private View mViewSmallPlayer;
+    private CircleImageView mImageAvatar;
+    private TextView mTextName, mTextSinger;
+    private ImageView mImagePrevious, mImagePlay, mImageNext;
+
     private MusicService mMusicService;
     private boolean mMusicBound = false;
     private Intent mIntent;
     private GenreFragment mGenreFragment;
     private PersonalFragment mPersonalFragment;
+    private List<Song> mSongs;
+    private int mPosition;
+    private int mState;
 
     @Override
     protected int getLayoutResources() {
@@ -49,12 +71,24 @@ public class MainActivity extends BaseActivity implements
 
     @Override
     protected void initVariables(Bundle savedInstanceState) {
-        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mNavigationView = findViewById(R.id.nav_view);
+        mToolbar = findViewById(R.id.toolbar);
+        mDrawerLayout = findViewById(R.id.drawer_layout);
         mBottomTabMain = findViewById(R.id.bottom_navigation);
+        mViewSmallPlayer = findViewById(R.id.layout_small_player);
+        mTextName = findViewById(R.id.text_name);
+        mTextSinger = findViewById(R.id.text_singer);
+        mImagePrevious = findViewById(R.id.image_previous);
+        mImagePlay = findViewById(R.id.image_play);
+        mImageNext = findViewById(R.id.image_next);
+        mImageAvatar = findViewById(R.id.image_avatar);
+
         mNavigationView.setNavigationItemSelectedListener(this);
         mBottomTabMain.setOnNavigationItemSelectedListener(this);
+        mImageNext.setOnClickListener(this);
+        mImagePlay.setOnClickListener(this);
+        mImagePrevious.setOnClickListener(this);
+        mViewSmallPlayer.setOnClickListener(this);
     }
 
     @Override
@@ -76,7 +110,93 @@ public class MainActivity extends BaseActivity implements
         mGenreFragment.setOnItemSongListener(this);
         mBottomTabMain.setSelectedItemId(R.id.menu_home);
         switchTab(mBottomTabMain.getSelectedItemId());
+    }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.image_next: {
+                if (mMusicService != null) {
+                    mMusicService.playNextMusic();
+                }
+                break;
+            }
+            case R.id.layout_small_player: {
+                Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+                startActivity(intent);
+                break;
+            }
+            case R.id.image_play: {
+                if (mMusicService != null) {
+                    mMusicService.chooseState();
+                }
+                break;
+            }
+            case R.id.image_previous: {
+                if (mMusicService != null) {
+                    mMusicService.playPreviousMusic();
+                }
+                break;
+            }
+        }
+    }
+
+    @Override
+    public void eventPause() {
+        mImagePlay.setImageDrawable(getResources().getDrawable(R.drawable.ic_media_play_symbol_white));
+    }
+
+    @Override
+    public void eventPlay() {
+        mImagePlay.setImageDrawable(getResources().getDrawable(R.drawable.ic_pause_button_white));
+        checkStatusPlayer(mState);
+    }
+
+    @Override
+    public void eventPlayFail(String message) {
+        ToastUtils.quickToast(this, message, Toast.LENGTH_SHORT);
+    }
+
+    @Override
+    public void eventPrevious() {
+        if (mMusicService != null) {
+            mPosition = mMusicService.getCurrentPosition();
+            mSongs = mMusicService.getSongs();
+        }
+        if (mSongs == null && mSongs.size() == 0) return;
+        loadUiSmallPlayer(mSongs.get(mPosition));
+    }
+
+    @Override
+    public void eventPreviousFail(String message) {
+        ToastUtils.quickToast(this, message, Toast.LENGTH_SHORT);
+    }
+
+    @Override
+    public void eventNext() {
+        if (mMusicService != null) {
+            mPosition = mMusicService.getCurrentPosition();
+            mSongs = mMusicService.getSongs();
+        }
+        if (mSongs == null && mSongs.size() == 0) return;
+        loadUiSmallPlayer(mSongs.get(mPosition));
+    }
+
+    @Override
+    public void eventNextFail(String message) {
+        ToastUtils.quickToast(this, message, Toast.LENGTH_SHORT);
+    }
+
+    @Override
+    public void eventPlayExit() {
+    }
+
+    @Override
+    public void updateSeekBar() {
+    }
+
+    @Override
+    public void removeUpdateSeekBar() {
     }
 
     @Override
@@ -86,7 +206,6 @@ public class MainActivity extends BaseActivity implements
             mIntent = new Intent(this, MusicService.class);
         }
         bindService(mIntent, mConnection, Context.BIND_AUTO_CREATE);
-        startService(mIntent);
     }
 
     @Override
@@ -103,6 +222,14 @@ public class MainActivity extends BaseActivity implements
         public void onServiceConnected(ComponentName name, IBinder service) {
             MusicService.MusicBinder binder = (MusicService.MusicBinder) service;
             mMusicService = binder.getService();
+            mMusicService.setServiceListener(MainActivity.this);
+            mPosition = mMusicService.getCurrentPosition();
+            mSongs = mMusicService.getSongs();
+            mState = mMusicService.getState();
+            if (mSongs != null && mSongs.size() != 0) {
+                checkStatusPlayer(mState);
+                loadUiSmallPlayer(mSongs.get(mPosition));
+            }
             mMusicBound = true;
         }
 
@@ -175,6 +302,34 @@ public class MainActivity extends BaseActivity implements
                         R.id.frame_main);
                 break;
             }
+        }
+    }
+
+    /**
+     * Load ui if music playing
+     *
+     * @param song
+     */
+    private void loadUiSmallPlayer(Song song) {
+        if (song == null) return;
+        mTextName.setText(song.getTitle());
+        mTextSinger.setText(song.getUsername());
+        Glide.with(mImageAvatar.getContext())
+                .load(song.getArtworkUrl())
+                .into(mImageAvatar);
+        if (mState == StateManager.PLAYING) {
+            mImagePlay.setImageResource(R.drawable.ic_pause_button_white);
+        } else {
+            mImagePlay.setImageResource(R.drawable.ic_media_play_symbol_white);
+        }
+    }
+
+    private void checkStatusPlayer(int status) {
+        if (status == StateManager.PLAYING || status == StateManager.PAUSE) {
+            mViewSmallPlayer.setVisibility(View.VISIBLE);
+
+        } else {
+            mViewSmallPlayer.setVisibility(View.GONE);
         }
     }
 

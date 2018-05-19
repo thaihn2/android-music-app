@@ -17,10 +17,12 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <include
-        layout="@layout/smart_player"
+        android:id="@+id/layout_small_player"
+        layout="@layout/small_player"
         android:layout_width="match_parent"
-        app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
-        android:layout_height="wrap_content" />
+        android:layout_height="?actionBarSize"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/bottom_navigation" />
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bottom_navigation"

@@ -7,13 +7,18 @@ public final class Constants {
     public static final String LIMIT = "limit";
     public static final String OFFSET = "offset";
     public static final String CLIENT_ID = "client_id";
+
     public static final String STREAM = "stream";
     public static final String METHOD_GET = "GET";
+    public static final String ERROR_NO_DATA = "Không có dữ liệu";
+    public static final String CHARSET_NAME_UTF8 = "UTF-8";
 
     public static final int DEFAULT_LIMIT = 20;
     public static final int DEFAULT_OFFSET = 20;
     public static final int DEFAULT_MAX_SEEK_BAR = 100;
     public static final int ERROR_DURATION = -1;
+    public static final int CONNECTION_TIME_OUT = 5000;
+    public static final int READ_INPUT_TIME_OUT = 5000;
 
     public static final String BUNDLE_LIST_MUSIC_PLAY = "LIST_MUSIC_PLAY";
     public static final String BUNDLE_POSITION_SONG = "POSITION_SONG";

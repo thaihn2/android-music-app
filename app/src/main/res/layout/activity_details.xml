@@ -114,7 +114,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/detail_margin_bottom"
-        android:progress="99"
+        android:maxHeight="@dimen/detail_max_height_seek_bar"
+        android:minHeight="@dimen/detail_max_height_seek_bar"
+        android:progressDrawable="@drawable/background_seek_bar"
         app:layout_constraintBottom_toTopOf="@id/image_loop"
         app:layout_constraintLeft_toRightOf="@id/text_time_progress"
         app:layout_constraintRight_toLeftOf="@id/text_duration" />
