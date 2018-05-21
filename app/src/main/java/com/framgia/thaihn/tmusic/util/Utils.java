@@ -10,6 +10,12 @@ import com.framgia.thaihn.tmusic.BuildConfig;
 
 public final class Utils {
 
+    public static String createUrlSearch(String key, int limit) {
+        return String.format("%s%s&%s=%d&%s=%s&%s=%s", Constants.URL_BASE_SEARCH,
+                Constants.SEARCH_FILTER, Constants.LIMIT, limit,
+                Constants.CLIENT_ID, BuildConfig.API_KEY, Constants.SEARCH_PARAM, key);
+    }
+
     public static String convertArtWorkUrlBetter(String artworkUrl) {
         if (artworkUrl != null) {
             return artworkUrl.replace(Constants.IMAGE_SIZE_LARGE, Constants.IMAGE_SIZE_ORIGIN);

@@ -42,7 +42,7 @@ public class SongRepository implements SongDataSource.RemoteDataSource,
 
 
     @Override
-    public void getAllSongLocal(SongDataSource.OnGetDataLocalListener<Song> listener) {
+    public void getAllSongLocal(SongDataSource.OnGetDataListener<Song> listener) {
         if (mLocalDataSource == null) return;
         mLocalDataSource.getAllSongLocal(listener);
     }
@@ -50,5 +50,11 @@ public class SongRepository implements SongDataSource.RemoteDataSource,
     @Override
     public void getSongDownload() {
 
+    }
+
+    @Override
+    public void searchSong(String url, SongDataSource.OnGetDataListener listener) {
+        if (mRemoteDataSource == null) return;
+        mRemoteDataSource.searchSong(url, listener);
     }
 }

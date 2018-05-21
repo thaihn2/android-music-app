@@ -1,6 +1,7 @@
 package com.framgia.thaihn.tmusic.data.source.remote;
 
 import com.framgia.thaihn.tmusic.data.interator.GetDataInteractor;
+import com.framgia.thaihn.tmusic.data.interator.SearchSongInteractor;
 import com.framgia.thaihn.tmusic.data.model.GenreSong;
 import com.framgia.thaihn.tmusic.data.model.Song;
 import com.framgia.thaihn.tmusic.data.source.SongDataSource;
@@ -33,5 +34,11 @@ public class SongRemoteDataSource implements SongDataSource.RemoteDataSource {
                                   SongDataSource.OnFetchDataListener<Song> listener) {
         GetDataInteractor getDataInteractor = new GetDataInteractor(listener);
         getDataInteractor.loadAllData(limit, offset);
+    }
+
+    @Override
+    public void searchSong(String url, SongDataSource.OnGetDataListener<Song> listener) {
+        SearchSongInteractor searchSongInteractor = new SearchSongInteractor(listener);
+        searchSongInteractor.searchSong(url);
     }
 }

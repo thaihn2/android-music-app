@@ -26,7 +26,7 @@ public class SongLocalDataSource implements SongDataSource.LocalDataSource {
     }
 
     @Override
-    public void getAllSongLocal(SongDataSource.OnGetDataLocalListener<Song> listener) {
+    public void getAllSongLocal(SongDataSource.OnGetDataListener<Song> listener) {
         mGetSongLocalInteractor.getAllSong(listener);
     }
 
