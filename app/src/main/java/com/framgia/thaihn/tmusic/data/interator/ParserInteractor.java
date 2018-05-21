@@ -3,6 +3,7 @@ package com.framgia.thaihn.tmusic.data.interator;
 import com.framgia.thaihn.tmusic.data.model.Song;
 import com.framgia.thaihn.tmusic.data.model.SongEntry;
 import com.framgia.thaihn.tmusic.util.Constants;
+import com.framgia.thaihn.tmusic.util.StringUtils;
 import com.framgia.thaihn.tmusic.util.Utils;
 
 import org.json.JSONArray;
@@ -93,32 +94,31 @@ public class ParserInteractor {
      * @throws JSONException
      */
     public Song parserSong(JSONObject jsonTrack) throws JSONException {
-        if (jsonTrack != null) {
-            Song song = new Song();
-            song.setArtworkUrl(jsonTrack.optString(SongEntry.ARTWORK_URL));
-            song.setCommentCount(jsonTrack.optInt(SongEntry.COMMENT_COUNT, 0));
-            song.setDescription(jsonTrack.optString(SongEntry.DESCRIPTION, ""));
-            song.setDownloadable(jsonTrack.optBoolean(SongEntry.DOWNLOADABLE, false));
-            song.setDownloadUrl(jsonTrack.optString(SongEntry.DOWNLOAD_URL, ""));
-            song.setDuration(jsonTrack.optInt(SongEntry.DURATION, 0));
-            song.setGenre(jsonTrack.optString(SongEntry.GENRE, ""));
-            song.setId(jsonTrack.optInt(SongEntry.ID, 0));
-            song.setKind(jsonTrack.optString(SongEntry.KIND, ""));
-            song.setLikesCount(jsonTrack.optInt(SongEntry.LIKES_COUNT, 0));
-            song.setPermalinkUrl(jsonTrack.optString(SongEntry.PERMALINK, ""));
-            song.setPlaybackCount(jsonTrack.optInt(SongEntry.PLAYBACK_COUNT, 0));
-            song.setTitle(jsonTrack.optString(SongEntry.TITLE, ""));
-            song.setUri(Utils.createUri(jsonTrack.optString(SongEntry.URI, "")));
-            song.setUserId(jsonTrack.optInt(SongEntry.USER_ID, 0));
-            JSONObject jsonUser = jsonTrack.getJSONObject(SongEntry.USER);
-            song.setAvatarUrl(jsonUser.optString(SongEntry.AVATAR_URL, ""));
-            song.setUsername(jsonUser.optString(SongEntry.USERNAME, ""));
-            song.setPublic(jsonTrack.optBoolean(SongEntry.PUBLIC, false));
-            if (song.getArtworkUrl() == null) {
-                song.setArtworkUrl(song.getAvatarUrl());
-            }
-            return song;
+        if (jsonTrack == null) return null;
+        Song song = new Song();
+        song.setArtworkUrl(jsonTrack.optString(SongEntry.ARTWORK_URL, null));
+        song.setCommentCount(jsonTrack.optInt(SongEntry.COMMENT_COUNT, 0));
+        song.setDescription(jsonTrack.optString(SongEntry.DESCRIPTION, ""));
+        song.setDownloadable(jsonTrack.optBoolean(SongEntry.DOWNLOADABLE, false));
+        song.setDownloadUrl(jsonTrack.optString(SongEntry.DOWNLOAD_URL, ""));
+        song.setDuration(jsonTrack.optInt(SongEntry.DURATION, 0));
+        song.setGenre(jsonTrack.optString(SongEntry.GENRE, ""));
+        song.setId(jsonTrack.optInt(SongEntry.ID, 0));
+        song.setKind(jsonTrack.optString(SongEntry.KIND, ""));
+        song.setLikesCount(jsonTrack.optInt(SongEntry.LIKES_COUNT, 0));
+        song.setPermalinkUrl(jsonTrack.optString(SongEntry.PERMALINK, ""));
+        song.setPlaybackCount(jsonTrack.optInt(SongEntry.PLAYBACK_COUNT, 0));
+        song.setTitle(jsonTrack.optString(SongEntry.TITLE, ""));
+        song.setUri(StringUtils.createUri(jsonTrack.optString(SongEntry.URI, "")));
+        song.setUserId(jsonTrack.optInt(SongEntry.USER_ID, 0));
+        JSONObject jsonUser = jsonTrack.getJSONObject(SongEntry.USER);
+        song.setAvatarUrl(jsonUser.optString(SongEntry.AVATAR_URL, null));
+        song.setUsername(jsonUser.optString(SongEntry.USERNAME, ""));
+        song.setPublic(jsonTrack.optBoolean(SongEntry.PUBLIC, false));
+        if (song.getArtworkUrl() == null) {
+            song.setArtworkUrl(song.getAvatarUrl());
         }
-        return null;
+        if (song.getArtworkUrl() == null) return null;
+        return song;
     }
 }

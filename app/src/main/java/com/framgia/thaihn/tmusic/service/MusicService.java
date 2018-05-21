@@ -13,6 +13,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 
 import com.framgia.thaihn.tmusic.R;
 import com.framgia.thaihn.tmusic.data.model.Song;
@@ -47,6 +49,8 @@ public class MusicService extends Service implements MediaListener.ServiceListen
     private PendingIntent mPendingItem;
     private NotificationCompat.Builder mBuilder;
     private NotificationManagerCompat mNotificationManager;
+    private PhoneStateListener mPhoneStateListener;
+    private TelephonyManager mTelephonyManager;
 
     public void setServiceListener(MediaListener.ServiceListener serviceListener) {
         mServiceListener = serviceListener;
@@ -61,6 +65,7 @@ public class MusicService extends Service implements MediaListener.ServiceListen
     @Override
     public void onCreate() {
         super.onCreate();
+        phoneListener();
         mNotificationManager = NotificationManagerCompat.from(this);
         createNotificationChannel();
         mMusicManager = new MusicManager(this);
@@ -135,6 +140,18 @@ public class MusicService extends Service implements MediaListener.ServiceListen
         return mMusicManager == null ? null : mMusicManager.getNameSinger();
     }
 
+    public void pauseMusic() {
+        if (mMusicManager == null) return;
+        mMusicManager.pause();
+        updateNotification();
+    }
+
+    public void startMusic() {
+        if (mMusicManager == null) return;
+        mMusicManager.start();
+        updateNotification();
+    }
+
     @Override
     public void eventPause() {
         if (mServiceListener == null) return;
@@ -153,7 +170,6 @@ public class MusicService extends Service implements MediaListener.ServiceListen
     public void eventPlayFail(String message) {
         if (mServiceListener == null) return;
         mServiceListener.eventPlayFail(message);
-        updateNotification();
     }
 
     @Override
@@ -167,7 +183,6 @@ public class MusicService extends Service implements MediaListener.ServiceListen
     public void eventPreviousFail(String message) {
         if (mServiceListener == null) return;
         mServiceListener.eventPreviousFail(message);
-        updateNotification();
     }
 
     @Override
@@ -204,6 +219,9 @@ public class MusicService extends Service implements MediaListener.ServiceListen
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if (mTelephonyManager != null) {
+            mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_NONE);
+        }
         if (mMusicManager == null) return;
         mMusicManager.destroy();
     }
@@ -219,10 +237,10 @@ public class MusicService extends Service implements MediaListener.ServiceListen
         switch (action) {
             case INTENT_ACTION_START_MUSIC: {
                 if (intent.getExtras() != null) {
-                    createNotification();
                     int position = intent.getIntExtra(Constants.BUNDLE_POSITION_SONG, 0);
                     List<Song> list = intent.getParcelableArrayListExtra(Constants.BUNDLE_LIST_MUSIC_PLAY);
                     playMusic(list, position);
+                    createNotification();
                 }
                 break;
             }
@@ -277,7 +295,6 @@ public class MusicService extends Service implements MediaListener.ServiceListen
         intentPlay.setAction(INTENT_ACTION_PLAY_PAUSE_MUSIC);
         mPendingPlay = PendingIntent.getService(this,
                 0, intentPlay, 0);
-        updateNotification();
     }
 
     private void updateNotification() {
@@ -296,8 +313,8 @@ public class MusicService extends Service implements MediaListener.ServiceListen
      * @return
      */
     private Notification buildNotification() {
-        int iconPlayPause = mMusicManager.getState() == StateManager.PAUSE ?
-                R.drawable.ic_media_play_symbol_white : R.drawable.ic_pause_button_white;
+        int iconPlayPause = mMusicManager.getState() == StateManager.PLAYING ?
+                R.drawable.ic_pause_button_white : R.drawable.ic_media_play_symbol_white;
         mBuilder = new NotificationCompat.Builder(this)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setContentTitle(getTitleSong())
@@ -312,5 +329,28 @@ public class MusicService extends Service implements MediaListener.ServiceListen
                                 ORDER_ACTION_PLAY_PAUSE, ORDER_ACTION_NEXT));
         Notification notification = mBuilder.build();
         return notification;
+    }
+
+    public void phoneListener() {
+        mPhoneStateListener = new PhoneStateListener() {
+            @Override
+            public void onCallStateChanged(int state, String incomingNumber) {
+                if (state == TelephonyManager.CALL_STATE_RINGING) {
+                    //Incoming call: Pause music
+                    pauseMusic();
+                } else if (state == TelephonyManager.CALL_STATE_IDLE) {
+                    //Not in call: Play music
+                    startMusic();
+                } else if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
+                    //A call is dialing, active or on hold
+                    pauseMusic();
+                }
+                super.onCallStateChanged(state, incomingNumber);
+            }
+        };
+        mTelephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+        if (mTelephonyManager != null) {
+            mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+        }
     }
 }

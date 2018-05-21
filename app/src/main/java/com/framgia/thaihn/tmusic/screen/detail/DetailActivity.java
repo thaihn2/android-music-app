@@ -22,8 +22,10 @@ import com.bumptech.glide.request.RequestOptions;
 import com.framgia.thaihn.tmusic.BaseActivity;
 import com.framgia.thaihn.tmusic.R;
 import com.framgia.thaihn.tmusic.data.model.Song;
+import com.framgia.thaihn.tmusic.service.DownloadMusicService;
 import com.framgia.thaihn.tmusic.service.MusicService;
 import com.framgia.thaihn.tmusic.util.Constants;
+import com.framgia.thaihn.tmusic.util.StringUtils;
 import com.framgia.thaihn.tmusic.util.ToastUtils;
 import com.framgia.thaihn.tmusic.util.Utils;
 import com.framgia.thaihn.tmusic.util.music.MediaListener;
@@ -274,7 +276,10 @@ public class DetailActivity extends BaseActivity
     private void checkDownload() {
         if (mMusicService != null) {
             if (mSongs.get(mPosition).isDownloadable()) {
-                // TODO download music in here
+                Intent intent = new Intent(this, DownloadMusicService.class);
+                intent.putExtra(Constants.INTENT_URL_DOWNLOAD, mSongs.get(mPosition).getUri());
+                intent.putExtra(Constants.INTENT_TITLE_DOWNLOAD, mSongs.get(mPosition).getTitle());
+                startService(intent);
             } else {
                 ToastUtils.quickToast(getApplicationContext(),
                         getString(R.string.str_can_not_download),
@@ -307,13 +312,12 @@ public class DetailActivity extends BaseActivity
         }
         RequestOptions options = new RequestOptions()
                 .centerCrop()
-                .placeholder(R.drawable.ic_loading)
-                .error(R.drawable.ic_warning)
+                .error(R.drawable.ic_music_player_large)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .priority(Priority.HIGH);
         Glide.with(mImageAvatar.getContext())
                 .applyDefaultRequestOptions(options)
-                .load(Utils.convertArtWorkUrlBetter(song.getArtworkUrl()))
+                .load(StringUtils.convertArtWorkUrlBetter(song.getArtworkUrl()))
                 .into(mImageAvatar);
         if (!song.isDownloadable()) {
             mImageDownload.setImageDrawable(

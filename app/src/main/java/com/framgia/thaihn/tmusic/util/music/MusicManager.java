@@ -7,7 +7,6 @@ import com.framgia.thaihn.tmusic.R;
 import com.framgia.thaihn.tmusic.data.model.Song;
 import com.framgia.thaihn.tmusic.service.MusicService;
 import com.framgia.thaihn.tmusic.util.Constants;
-import com.framgia.thaihn.tmusic.util.Utils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -82,6 +81,7 @@ public class MusicManager implements MediaPlayer.OnPreparedListener,
      * Play previous song if position different 0
      */
     public void playPreviousSong() {
+        if (mSongs == null || mSongs.size() == 0) return;
         if (mCurrentPosition == 0) {
             mServiceListener.eventPreviousFail(mMusicService.getString(R.string.error_first_of_list_song));
             return;
@@ -95,6 +95,7 @@ public class MusicManager implements MediaPlayer.OnPreparedListener,
      * Play next song if position is last and loop type is all
      */
     public void playNextSong() {
+        if (mSongs == null || mSongs.size() == 0) return;
         if (mCurrentPosition == mSongs.size() - 1) {
             if (mLoopType != StateManager.LOOP_ALL) {
                 mServiceListener.eventNextFail(mMusicService.getString(R.string.error_end_of_list_song));
@@ -232,9 +233,17 @@ public class MusicManager implements MediaPlayer.OnPreparedListener,
     /**
      * Pause music
      */
-    private void pause() {
+    public void pause() {
         if (mMediaPlayer == null) return;
         mMediaPlayer.pause();
+        setState(StateManager.PAUSE);
+    }
+
+
+    public void start() {
+        if (mMediaPlayer == null) return;
+        mMediaPlayer.start();
+        setState(StateManager.PLAYING);
     }
 
     /**

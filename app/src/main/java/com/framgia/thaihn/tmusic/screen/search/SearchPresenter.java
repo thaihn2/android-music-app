@@ -3,6 +3,7 @@ package com.framgia.thaihn.tmusic.screen.search;
 import com.framgia.thaihn.tmusic.data.model.Song;
 import com.framgia.thaihn.tmusic.data.repository.SongRepository;
 import com.framgia.thaihn.tmusic.data.source.SongDataSource;
+import com.framgia.thaihn.tmusic.util.StringUtils;
 import com.framgia.thaihn.tmusic.util.Utils;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public class SearchPresenter implements SearchContract.Presenter,
     @Override
     public void searchSong(int limit, int offset, String key) {
         mView.showProgress();
-        mSongRepository.searchSong(Utils.createUrlSearch(key, limit), this);
+        mSongRepository.searchSong(StringUtils.createUrlSearch(key, limit), this);
     }
 
     @Override

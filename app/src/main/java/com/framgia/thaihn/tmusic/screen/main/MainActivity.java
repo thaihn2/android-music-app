@@ -160,8 +160,10 @@ public class MainActivity extends BaseActivity implements
 
     @Override
     public void eventPlay() {
-        mImagePlay.setImageDrawable(getResources().getDrawable(R.drawable.ic_pause_button_white));
         checkStatusPlayer(mState);
+        if (mSongs == null || mSongs.size() == 0) return;
+        loadUiSmallPlayer(mSongs.get(mPosition));
+        mImagePlay.setImageDrawable(getResources().getDrawable(R.drawable.ic_pause_button_white));
     }
 
     @Override
@@ -175,7 +177,7 @@ public class MainActivity extends BaseActivity implements
             mPosition = mMusicService.getCurrentPosition();
             mSongs = mMusicService.getSongs();
         }
-        if (mSongs == null && mSongs.size() == 0) return;
+        if (mSongs == null || mSongs.size() == 0) return;
         loadUiSmallPlayer(mSongs.get(mPosition));
     }
 
@@ -190,7 +192,7 @@ public class MainActivity extends BaseActivity implements
             mPosition = mMusicService.getCurrentPosition();
             mSongs = mMusicService.getSongs();
         }
-        if (mSongs == null && mSongs.size() == 0) return;
+        if (mSongs == null || mSongs.size() == 0) return;
         loadUiSmallPlayer(mSongs.get(mPosition));
     }
 
@@ -331,17 +333,13 @@ public class MainActivity extends BaseActivity implements
         Glide.with(mImageAvatar.getContext())
                 .load(song.getArtworkUrl())
                 .into(mImageAvatar);
-        if (mState == StateManager.PLAYING) {
-            mImagePlay.setImageResource(R.drawable.ic_pause_button_white);
-        } else {
-            mImagePlay.setImageResource(R.drawable.ic_media_play_symbol_white);
-        }
+        mImagePlay.setImageResource(R.drawable.ic_media_play_symbol_white);
     }
 
     private void checkStatusPlayer(int status) {
-        if (status == StateManager.PLAYING || status == StateManager.PAUSE) {
+        if (status == StateManager.PLAYING || status == StateManager.PAUSE
+                || status == StateManager.PREPARE) {
             mViewSmallPlayer.setVisibility(View.VISIBLE);
-
         } else {
             mViewSmallPlayer.setVisibility(View.GONE);
         }

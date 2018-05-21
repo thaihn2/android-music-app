@@ -5,6 +5,7 @@ import com.framgia.thaihn.tmusic.data.interator.SearchSongInteractor;
 import com.framgia.thaihn.tmusic.data.model.GenreSong;
 import com.framgia.thaihn.tmusic.data.model.Song;
 import com.framgia.thaihn.tmusic.data.source.SongDataSource;
+import com.framgia.thaihn.tmusic.util.StringUtils;
 import com.framgia.thaihn.tmusic.util.Utils;
 
 public class SongRemoteDataSource implements SongDataSource.RemoteDataSource {
@@ -25,7 +26,7 @@ public class SongRemoteDataSource implements SongDataSource.RemoteDataSource {
     public void getSongsRemote(int position, int limit, int offSet,
                                SongDataSource.OnFetchDataListener<Song> listener) {
         GetDataInteractor getDataInteractor = new GetDataInteractor(listener);
-        String url = Utils.createUrlContent(GenreSong.getGenres()[position], limit, offSet);
+        String url = StringUtils.createUrlContent(GenreSong.getGenres()[position], limit, offSet);
         getDataInteractor.loadData(position, url);
     }
 

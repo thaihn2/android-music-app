@@ -20,6 +20,7 @@ import com.framgia.thaihn.tmusic.BaseActivity;
 import com.framgia.thaihn.tmusic.R;
 import com.framgia.thaihn.tmusic.data.model.Song;
 import com.framgia.thaihn.tmusic.util.Constants;
+import com.framgia.thaihn.tmusic.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -119,9 +120,13 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        if (!TextUtils.isEmpty(newText)) {
-            mPresenter.searchSong(Constants.DEFAULT_LIMIT_SEARCH,
-                    Constants.DEFAULT_OFFSET, newText);
+        if (Utils.checkNetwork(this)) {
+            if (!TextUtils.isEmpty(newText)) {
+                mPresenter.searchSong(Constants.DEFAULT_LIMIT_SEARCH,
+                        Constants.DEFAULT_OFFSET, newText);
+            }
+        } else {
+            showError(getString(R.string.error_no_internet));
         }
         return true;
     }

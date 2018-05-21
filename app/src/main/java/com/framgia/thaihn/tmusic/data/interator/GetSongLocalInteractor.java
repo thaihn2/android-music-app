@@ -40,7 +40,8 @@ public class GetSongLocalInteractor {
                 MediaStore.Audio.AudioColumns.TITLE,
                 MediaStore.Audio.AudioColumns.DATA,
                 MediaStore.Audio.AudioColumns.ARTIST,
-                MediaStore.Audio.AudioColumns.DURATION};
+                MediaStore.Audio.AudioColumns.DURATION,
+                MediaStore.Audio.AudioColumns._ID};
         Cursor cursor = mContext.getContentResolver().query(
                 uri,
                 projections,

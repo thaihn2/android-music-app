@@ -71,8 +71,7 @@ public class SongsAdapter
             if (song != null) {
                 RequestOptions options = new RequestOptions()
                         .centerCrop()
-                        .placeholder(R.drawable.ic_loading)
-                        .error(R.drawable.ic_warning)
+                        .error(R.drawable.ic_music_player_large)
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .priority(Priority.HIGH);
                 Glide.with(mAvatarSong.getContext())

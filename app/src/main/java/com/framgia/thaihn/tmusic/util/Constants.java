@@ -27,6 +27,8 @@ public final class Constants {
 
     public static final String BUNDLE_LIST_MUSIC_PLAY = "LIST_MUSIC_PLAY";
     public static final String BUNDLE_POSITION_SONG = "POSITION_SONG";
+    public static final String INTENT_URL_DOWNLOAD = "url_download";
+    public static final String INTENT_TITLE_DOWNLOAD = "title_download";
 
     public static final String IMAGE_SIZE_ORIGIN = "original";
     public static final String IMAGE_SIZE_LARGE = "large";
