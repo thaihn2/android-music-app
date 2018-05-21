@@ -2,9 +2,7 @@ package com.framgia.thaihn.tmusic.screen.genre;
 
 import android.app.Fragment;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -16,8 +14,6 @@ import com.framgia.thaihn.tmusic.R;
 import com.framgia.thaihn.tmusic.data.model.Genre;
 import com.framgia.thaihn.tmusic.data.model.GenreSong;
 import com.framgia.thaihn.tmusic.data.model.Song;
-import com.framgia.thaihn.tmusic.screen.detail.DetailActivity;
-import com.framgia.thaihn.tmusic.service.MusicService;
 import com.framgia.thaihn.tmusic.util.Constants;
 import com.framgia.thaihn.tmusic.util.ToastUtils;
 
@@ -106,14 +102,8 @@ public class GenreFragment extends BaseFragment implements
 
     @Override
     public void onItemClicked(int positionGenre, int position) {
-        Intent intent = new Intent(getActivity(), MusicService.class);
-        intent.putExtra(Constants.BUNDLE_POSITION_SONG, position);
-        intent.setAction(MusicService.INTENT_ACTION_START_MUSIC);
-        List<Song> list = mGenreAdapter.getGenres().get(positionGenre).getSongs();
-        intent.putParcelableArrayListExtra(Constants.BUNDLE_LIST_MUSIC_PLAY, (ArrayList<? extends Parcelable>) list);
-        getActivity().startService(intent);
-        Intent intentDetail = new Intent(getActivity(), DetailActivity.class);
-        startActivity(intentDetail);
+        getBaseActivity().gotoPlayMusic(position,
+                mGenreAdapter.getGenres().get(positionGenre).getSongs());
     }
 
     @Override

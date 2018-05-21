@@ -3,6 +3,7 @@ package com.framgia.thaihn.tmusic.data.interator;
 import com.framgia.thaihn.tmusic.data.model.Song;
 import com.framgia.thaihn.tmusic.data.model.SongEntry;
 import com.framgia.thaihn.tmusic.util.Constants;
+import com.framgia.thaihn.tmusic.util.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -107,7 +108,7 @@ public class ParserInteractor {
             song.setPermalinkUrl(jsonTrack.optString(SongEntry.PERMALINK, ""));
             song.setPlaybackCount(jsonTrack.optInt(SongEntry.PLAYBACK_COUNT, 0));
             song.setTitle(jsonTrack.optString(SongEntry.TITLE, ""));
-            song.setUri(jsonTrack.optString(SongEntry.URI, ""));
+            song.setUri(Utils.createUri(jsonTrack.optString(SongEntry.URI, "")));
             song.setUserId(jsonTrack.optInt(SongEntry.USER_ID, 0));
             JSONObject jsonUser = jsonTrack.getJSONObject(SongEntry.USER);
             song.setAvatarUrl(jsonUser.optString(SongEntry.AVATAR_URL, ""));

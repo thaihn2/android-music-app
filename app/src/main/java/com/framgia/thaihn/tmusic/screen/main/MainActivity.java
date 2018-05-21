@@ -31,6 +31,7 @@ import com.framgia.thaihn.tmusic.data.model.Song;
 import com.framgia.thaihn.tmusic.screen.detail.DetailActivity;
 import com.framgia.thaihn.tmusic.screen.genre.GenreFragment;
 import com.framgia.thaihn.tmusic.screen.personal.PersonalFragment;
+import com.framgia.thaihn.tmusic.screen.search.SearchActivity;
 import com.framgia.thaihn.tmusic.service.MusicService;
 import com.framgia.thaihn.tmusic.util.FragmentUtils;
 import com.framgia.thaihn.tmusic.util.ToastUtils;
@@ -94,8 +95,8 @@ public class MainActivity extends BaseActivity implements
     @Override
     protected void initData(Bundle savedInstanceState) {
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.color_persian_green)));
-        changeColorStatusBar();
+        getSupportActionBar().setBackgroundDrawable(
+                new ColorDrawable(getResources().getColor(R.color.color_persian_green)));
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this,
                 mDrawerLayout,
@@ -110,6 +111,17 @@ public class MainActivity extends BaseActivity implements
         mGenreFragment.setOnItemSongListener(this);
         mBottomTabMain.setSelectedItemId(R.id.menu_home);
         switchTab(mBottomTabMain.getSelectedItemId());
+    }
+
+
+    @Override
+    public void changeColorStatusBar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(getResources().getColor(R.color.color_aqua_deep));
+        }
     }
 
     @Override
@@ -259,6 +271,8 @@ public class MainActivity extends BaseActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_search: {
+                Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+                startActivity(intent);
                 break;
             }
         }
@@ -330,18 +344,6 @@ public class MainActivity extends BaseActivity implements
 
         } else {
             mViewSmallPlayer.setVisibility(View.GONE);
-        }
-    }
-
-    /**
-     * Change color of status bar
-     */
-    private void changeColorStatusBar() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = getWindow();
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(getResources().getColor(R.color.color_aqua_deep));
         }
     }
 }
