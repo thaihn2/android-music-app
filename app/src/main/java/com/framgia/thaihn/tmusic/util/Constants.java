@@ -10,7 +10,8 @@ public final class Constants {
     public static final String CLIENT_ID = "client_id";
     public static final String SEARCH_FILTER = "?filter=public";
     public static final String SEARCH_PARAM = "q";
-
+    public static final String DEFAULT_FILE_MP3 = ".mp3";
+    public static final String DEFAULT_FOLDER_DOWNLOAD = "/tmusic/";
 
     public static final String STREAM = "stream";
     public static final String METHOD_GET = "GET";
@@ -27,6 +28,8 @@ public final class Constants {
 
     public static final String BUNDLE_LIST_MUSIC_PLAY = "LIST_MUSIC_PLAY";
     public static final String BUNDLE_POSITION_SONG = "POSITION_SONG";
+    public static final String INTENT_URL_DOWNLOAD = "url_download";
+    public static final String INTENT_TITLE_DOWNLOAD = "title_download";
 
     public static final String IMAGE_SIZE_ORIGIN = "original";
     public static final String IMAGE_SIZE_LARGE = "large";

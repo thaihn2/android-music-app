@@ -7,18 +7,18 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 
 import com.framgia.thaihn.tmusic.R;
 import com.framgia.thaihn.tmusic.data.model.Song;
 import com.framgia.thaihn.tmusic.screen.detail.DetailActivity;
-import com.framgia.thaihn.tmusic.screen.main.MainActivity;
 import com.framgia.thaihn.tmusic.util.Constants;
 import com.framgia.thaihn.tmusic.util.music.MediaListener;
 import com.framgia.thaihn.tmusic.util.music.MusicManager;
@@ -34,6 +34,7 @@ public class MusicService extends Service implements MediaListener.ServiceListen
     public static final String INTENT_ACTION_PREVIOUS_MUSIC = "PREVIOUS_MUSIC";
     public static final String INTENT_ACTION_OPEN_APP = "OPEN_APP";
     public static final String CHANNEL_ID = "Music";
+    public static final String CHANNEL_NAME = "TMUsic";
     private static final int ORDER_ACTION_PREVIOUS = 0;
     private static final int ORDER_ACTION_PLAY_PAUSE = 1;
     private static final int ORDER_ACTION_NEXT = 2;
@@ -48,6 +49,8 @@ public class MusicService extends Service implements MediaListener.ServiceListen
     private PendingIntent mPendingItem;
     private NotificationCompat.Builder mBuilder;
     private NotificationManagerCompat mNotificationManager;
+    private PhoneStateListener mPhoneStateListener;
+    private TelephonyManager mTelephonyManager;
 
     public void setServiceListener(MediaListener.ServiceListener serviceListener) {
         mServiceListener = serviceListener;
@@ -62,6 +65,7 @@ public class MusicService extends Service implements MediaListener.ServiceListen
     @Override
     public void onCreate() {
         super.onCreate();
+        phoneListener();
         mNotificationManager = NotificationManagerCompat.from(this);
         createNotificationChannel();
         mMusicManager = new MusicManager(this);
@@ -112,6 +116,18 @@ public class MusicService extends Service implements MediaListener.ServiceListen
         mMusicManager.seekTo(progress);
     }
 
+    public void pauseMusic() {
+        if (mMusicManager == null) return;
+        mMusicManager.pause();
+        updateNotification();
+    }
+
+    public void startMusic() {
+        if (mMusicManager == null) return;
+        mMusicManager.start();
+        updateNotification();
+    }
+
     public int getCurrentPosition() {
         return mMusicManager == null ? null : mMusicManager.getCurrentPosition();
     }
@@ -154,7 +170,6 @@ public class MusicService extends Service implements MediaListener.ServiceListen
     public void eventPlayFail(String message) {
         if (mServiceListener == null) return;
         mServiceListener.eventPlayFail(message);
-        updateNotification();
     }
 
     @Override
@@ -168,7 +183,6 @@ public class MusicService extends Service implements MediaListener.ServiceListen
     public void eventPreviousFail(String message) {
         if (mServiceListener == null) return;
         mServiceListener.eventPreviousFail(message);
-        updateNotification();
     }
 
     @Override
@@ -205,6 +219,9 @@ public class MusicService extends Service implements MediaListener.ServiceListen
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if (mTelephonyManager != null) {
+            mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_NONE);
+        }
         if (mMusicManager == null) return;
         mMusicManager.destroy();
     }
@@ -246,12 +263,11 @@ public class MusicService extends Service implements MediaListener.ServiceListen
     }
 
     private void createNotificationChannel() {
-        CharSequence name = "Music";
         int importance = NotificationManager.IMPORTANCE_LOW;
         NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         NotificationChannel mChannel = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
+            mChannel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, importance);
             manager.createNotificationChannel(mChannel);
         }
     }
@@ -279,7 +295,6 @@ public class MusicService extends Service implements MediaListener.ServiceListen
         intentPlay.setAction(INTENT_ACTION_PLAY_PAUSE_MUSIC);
         mPendingPlay = PendingIntent.getService(this,
                 0, intentPlay, 0);
-        updateNotification();
     }
 
     private void updateNotification() {
@@ -289,6 +304,29 @@ public class MusicService extends Service implements MediaListener.ServiceListen
         } else {
             mNotificationManager.notify(DEFAULT_ID_NOTIFICATION, buildNotification());
             stopForeground(false);
+        }
+    }
+
+    public void phoneListener() {
+        mPhoneStateListener = new PhoneStateListener() {
+            @Override
+            public void onCallStateChanged(int state, String incomingNumber) {
+                if (state == TelephonyManager.CALL_STATE_RINGING) {
+                    //Incoming call: Pause music
+                    pauseMusic();
+                } else if (state == TelephonyManager.CALL_STATE_IDLE) {
+                    //Not in call: Play music
+                    startMusic();
+                } else if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
+                    //A call is dialing, active or on hold
+                    pauseMusic();
+                }
+                super.onCallStateChanged(state, incomingNumber);
+            }
+        };
+        mTelephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+        if (mTelephonyManager != null) {
+            mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
         }
     }
 

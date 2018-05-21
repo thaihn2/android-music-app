@@ -6,6 +6,7 @@ import com.framgia.thaihn.tmusic.data.model.GenreSong;
 import com.framgia.thaihn.tmusic.data.model.Song;
 import com.framgia.thaihn.tmusic.data.source.SongDataSource;
 import com.framgia.thaihn.tmusic.util.Constants;
+import com.framgia.thaihn.tmusic.util.StringUtils;
 import com.framgia.thaihn.tmusic.util.Utils;
 
 import org.json.JSONException;
@@ -28,7 +29,7 @@ public class GetDataInteractor {
 
     public void loadAllData(int limit, int offset) {
         for (int i = 0; i < GenreSong.getGenres().length; i++) {
-            new FetchData(i).execute(Utils.createUrlContent(
+            new FetchData(i).execute(StringUtils.createUrlContent(
                     GenreSong.getGenres()[i],
                     limit, offset
             ));

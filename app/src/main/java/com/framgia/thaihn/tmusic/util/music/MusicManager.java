@@ -232,9 +232,16 @@ public class MusicManager implements MediaPlayer.OnPreparedListener,
     /**
      * Pause music
      */
-    private void pause() {
+    public void pause() {
         if (mMediaPlayer == null) return;
         mMediaPlayer.pause();
+        setState(StateManager.PAUSE);
+    }
+
+    public void start() {
+        if (mMediaPlayer == null) return;
+        mMediaPlayer.start();
+        setState(StateManager.PLAYING);
     }
 
     /**

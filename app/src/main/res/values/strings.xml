@@ -16,4 +16,6 @@
     <string name="error_can_not_load_song_offline">Can\'t load music from SD-Card</string>
     <string name="error_get_song_from_sd_card">Can\'t get song from SD Card</string>
     <string name="str_hint_search_view">Enter text in here</string>
+    <string name="error_no_internet">Không có kết nối internet</string>
+    <string name="error_connect_internet_continue">Kết nối mạng để tiếp tục</string>
 </resources>

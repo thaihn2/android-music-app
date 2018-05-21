@@ -16,6 +16,7 @@ import com.framgia.thaihn.tmusic.data.model.GenreSong;
 import com.framgia.thaihn.tmusic.data.model.Song;
 import com.framgia.thaihn.tmusic.util.Constants;
 import com.framgia.thaihn.tmusic.util.ToastUtils;
+import com.framgia.thaihn.tmusic.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +63,11 @@ public class GenreFragment extends BaseFragment implements
         mPresenter = new GenrePresenter();
         mPresenter.setView(this);
         configRecycle(getActivity());
-        mPresenter.loadAllMusic(Constants.DEFAULT_LIMIT, Constants.DEFAULT_OFFSET);
+        if (Utils.checkNetwork(getActivity())) {
+            mPresenter.loadAllMusic(Constants.DEFAULT_LIMIT, Constants.DEFAULT_OFFSET);
+        } else {
+            showError(getString(R.string.error_no_internet));
+        }
     }
 
     @Override

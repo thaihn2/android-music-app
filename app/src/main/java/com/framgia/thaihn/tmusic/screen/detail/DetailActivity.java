@@ -24,6 +24,7 @@ import com.framgia.thaihn.tmusic.R;
 import com.framgia.thaihn.tmusic.data.model.Song;
 import com.framgia.thaihn.tmusic.service.MusicService;
 import com.framgia.thaihn.tmusic.util.Constants;
+import com.framgia.thaihn.tmusic.util.StringUtils;
 import com.framgia.thaihn.tmusic.util.ToastUtils;
 import com.framgia.thaihn.tmusic.util.Utils;
 import com.framgia.thaihn.tmusic.util.music.MediaListener;
@@ -222,7 +223,6 @@ public class DetailActivity extends BaseActivity
         mSeekbarPlay.setProgress(0);
     }
 
-
     /**
      * Create bound service to connect and control service
      */
@@ -273,12 +273,23 @@ public class DetailActivity extends BaseActivity
      */
     private void checkDownload() {
         if (mMusicService != null) {
+            if (mSongs == null && mSongs.size() == 0) return;
             if (mSongs.get(mPosition).isDownloadable()) {
-                // TODO download music in here
+                if (Utils.checkNetwork(this)) {
+//                    Intent intent = new Intent(this, DownloadMusic.class);
+//                    intent.putExtra(Constants.INTENT_URL_DOWNLOAD,
+//                            StringUtils.createUrlDownload(mSongs.get(mPosition).getDownloadUrl()));
+//                    System.out.println("TTT url " + StringUtils.createUrlDownload(mSongs.get(mPosition).getDownloadUrl()));
+//                    intent.putExtra(Constants.INTENT_TITLE_DOWNLOAD,
+//                            mSongs.get(mPosition).getTitle());
+//                    startService(intent);
+                } else {
+                    ToastUtils.quickToast(this,
+                            getString(R.string.error_connect_internet_continue), Toast.LENGTH_SHORT);
+                }
             } else {
                 ToastUtils.quickToast(getApplicationContext(),
-                        getString(R.string.str_can_not_download),
-                        Toast.LENGTH_SHORT);
+                        getString(R.string.str_can_not_download), Toast.LENGTH_SHORT);
             }
         }
     }
@@ -313,7 +324,7 @@ public class DetailActivity extends BaseActivity
                 .priority(Priority.HIGH);
         Glide.with(mImageAvatar.getContext())
                 .applyDefaultRequestOptions(options)
-                .load(Utils.convertArtWorkUrlBetter(song.getArtworkUrl()))
+                .load(StringUtils.convertArtWorkUrlBetter(song.getArtworkUrl()))
                 .into(mImageAvatar);
         if (!song.isDownloadable()) {
             mImageDownload.setImageDrawable(
@@ -364,8 +375,12 @@ public class DetailActivity extends BaseActivity
                 * Constants.DEFAULT_MAX_SEEK_BAR;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             // Su dung hoat canh dong giua hien tai va muc tieu
+            mSeekbarPlay.setProgress(0);
+            mSeekbarPlay.setMax(Constants.DEFAULT_MAX_SEEK_BAR);
             mSeekbarPlay.setProgress((int) progress, true);
         } else {
+            mSeekbarPlay.setProgress(0);
+            mSeekbarPlay.setMax(Constants.DEFAULT_MAX_SEEK_BAR);
             mSeekbarPlay.setProgress((int) progress);
         }
         long time = (long) (mSongs.get(mPosition).getDuration() /

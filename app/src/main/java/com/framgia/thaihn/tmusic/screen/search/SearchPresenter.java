@@ -1,26 +1,26 @@
 package com.framgia.thaihn.tmusic.screen.search;
 
 import com.framgia.thaihn.tmusic.data.model.Song;
-import com.framgia.thaihn.tmusic.data.repository.SearchRepository;
-import com.framgia.thaihn.tmusic.data.source.SearchDataSource;
-import com.framgia.thaihn.tmusic.util.Utils;
+import com.framgia.thaihn.tmusic.data.repository.SongRepository;
+import com.framgia.thaihn.tmusic.data.source.SongDataSource;
+import com.framgia.thaihn.tmusic.util.StringUtils;
 
 import java.util.List;
 
 public class SearchPresenter implements SearchContract.Presenter,
-        SearchDataSource.OnSearchDataListener<Song> {
+        SongDataSource.OnGetDataListener<Song> {
 
     private SearchContract.View mView;
-    private SearchRepository mSearchRepository;
+    private SongRepository mSongRepository;
 
     public SearchPresenter() {
-        mSearchRepository = SearchRepository.getInstance();
+        mSongRepository = SongRepository.getInstance();
     }
 
     @Override
     public void searchSong(int limit, int offset, String key) {
         mView.showProgress();
-        mSearchRepository.searchSong(Utils.createUrlSearch(key, limit), this);
+        mSongRepository.searchSong(StringUtils.createUrlSearch(key, limit), this);
     }
 
     @Override
@@ -39,13 +39,13 @@ public class SearchPresenter implements SearchContract.Presenter,
     }
 
     @Override
-    public void onSearchDataSuccess(List<Song> list) {
+    public void onGetDataSuccess(List<Song> list) {
         mView.hideProgress();
         mView.showData(list);
     }
 
     @Override
-    public void onSearchDataError(String message) {
+    public void onGetDataError(String message) {
         mView.hideProgress();
         mView.showError(message);
     }

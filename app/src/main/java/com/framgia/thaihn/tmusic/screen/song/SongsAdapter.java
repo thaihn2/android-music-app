@@ -69,16 +69,13 @@ public class SongsAdapter
 
         public void setData(Song song) {
             if (song != null) {
-                RequestOptions options = new RequestOptions()
-                        .centerCrop()
-                        .placeholder(R.drawable.ic_loading)
-                        .error(R.drawable.ic_warning)
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .priority(Priority.HIGH);
-                Glide.with(mAvatarSong.getContext())
-                        .applyDefaultRequestOptions(options)
-                        .load(song.getArtworkUrl())
-                        .into(mAvatarSong);
+                if (song.getArtworkUrl() == null) {
+                    mAvatarSong.setImageResource(R.drawable.ic_music_player);
+                } else {
+                    Glide.with(mAvatarSong.getContext())
+                            .load(song.getArtworkUrl())
+                            .into(mAvatarSong);
+                }
                 mTextNameSong.setText(song.getTitle());
                 mTextSingerSong.setText(song.getUsername());
             }

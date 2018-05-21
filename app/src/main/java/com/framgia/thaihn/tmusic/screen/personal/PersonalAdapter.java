@@ -70,9 +70,13 @@ public class PersonalAdapter extends RecyclerView.Adapter<PersonalAdapter.ViewHo
             if (song == null) return;
             mTextTitle.setText(song.getTitle());
             mTextSinger.setText(song.getUsername());
-            Glide.with(mImageAvatar.getContext())
-                    .load(R.drawable.ic_music_player)
-                    .into(mImageAvatar);
+            if (song.getArtworkUrl() == null) {
+                mImageAvatar.setImageResource(R.drawable.ic_music_player);
+            } else {
+                Glide.with(mImageAvatar.getContext())
+                        .load(song.getArtworkUrl())
+                        .into(mImageAvatar);
+            }
         }
 
         @Override
