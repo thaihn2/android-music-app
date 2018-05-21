@@ -10,6 +10,7 @@ import com.framgia.thaihn.tmusic.data.model.Song;
 import com.framgia.thaihn.tmusic.util.Constants;
 import com.framgia.thaihn.tmusic.util.music.MediaListener;
 import com.framgia.thaihn.tmusic.util.music.MusicManager;
+import com.framgia.thaihn.tmusic.util.music.StateManager;
 
 import java.util.List;
 
@@ -90,13 +91,15 @@ public class MusicService extends Service implements MediaListener.ServiceListen
     }
 
     public int getCurrentDuration() {
-        if (mMusicManager == null) return Constants.ERROR_DURATION;
-        return mMusicManager.getCurrentDuration();
+        return mMusicManager == null ? null : mMusicManager.getCurrentDuration();
     }
 
     public List<Song> getSongs() {
-        if (mMusicManager == null) return null;
-        return mMusicManager.getSongs();
+        return mMusicManager == null ? null : mMusicManager.getSongs();
+    }
+
+    public int getState() {
+        return mMusicManager == null ? StateManager.PREPARE : mMusicManager.getState();
     }
 
     @Override

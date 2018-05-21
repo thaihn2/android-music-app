@@ -27,6 +27,7 @@ import com.framgia.thaihn.tmusic.util.Constants;
 import com.framgia.thaihn.tmusic.util.ToastUtils;
 import com.framgia.thaihn.tmusic.util.Utils;
 import com.framgia.thaihn.tmusic.util.music.MediaListener;
+import com.framgia.thaihn.tmusic.util.music.StateManager;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -43,6 +44,7 @@ public class DetailActivity extends BaseActivity
 
     private List<Song> mSongs;
     private int mPosition;
+    private int mState;
     private MusicService mMusicService;
     private boolean mMusicBound;
     private boolean mSeekByUser;
@@ -134,6 +136,9 @@ public class DetailActivity extends BaseActivity
             mIntent = new Intent(this, MusicService.class);
         }
         bindService(mIntent, mConnection, Context.BIND_AUTO_CREATE);
+        if (mState == StateManager.PLAYING) {
+            startProgressUpdate();
+        }
     }
 
     @Override
@@ -143,6 +148,7 @@ public class DetailActivity extends BaseActivity
             unbindService(mConnection);
             mMusicBound = false;
         }
+        removeProgressUpdate();
     }
 
     @Override
@@ -154,6 +160,7 @@ public class DetailActivity extends BaseActivity
     @Override
     public void eventPlay() {
         mImagePlay.setImageDrawable(getResources().getDrawable(R.drawable.ic_pause_button_white));
+        startProgressUpdate();
     }
 
     @Override
@@ -167,6 +174,7 @@ public class DetailActivity extends BaseActivity
             mPosition = mMusicService.getCurrentPosition();
             mSongs = mMusicService.getSongs();
         }
+        if (mSongs == null) return;
         loadUi(mSongs.get(mPosition));
     }
 
@@ -181,6 +189,7 @@ public class DetailActivity extends BaseActivity
             mPosition = mMusicService.getCurrentPosition();
             mSongs = mMusicService.getSongs();
         }
+        if (mSongs == null) return;
         loadUi(mSongs.get(mPosition));
     }
 
@@ -216,7 +225,8 @@ public class DetailActivity extends BaseActivity
             mMusicService.setServiceListener(DetailActivity.this);
             mPosition = mMusicService.getCurrentPosition();
             mSongs = mMusicService.getSongs();
-            if (mSongs != null) {
+            mState = mMusicService.getState();
+            if (mSongs != null && mSongs.size() != 0) {
                 loadUi(mSongs.get(mPosition));
             }
             mMusicBound = true;
@@ -274,6 +284,18 @@ public class DetailActivity extends BaseActivity
         mTextNameSong.setText(song.getTitle());
         mTextNameSinger.setText(song.getUsername());
         mTextDuration.setText(Utils.calculatorDuration(song.getDuration()));
+        if (mState == StateManager.PLAYING) {
+            updateSeekBar();
+        } else if (mState == StateManager.PAUSE) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    calculatorProgress();
+                }
+            });
+        } else {
+            mTextTimeProgress.setText(getString(R.string.time_default));
+        }
         RequestOptions options = new RequestOptions()
                 .centerCrop()
                 .placeholder(R.drawable.ic_loading)
@@ -291,8 +313,11 @@ public class DetailActivity extends BaseActivity
             mImageDownload.setImageDrawable(
                     getResources().getDrawable(R.drawable.ic_download_white));
         }
-        mImagePlay.setImageDrawable(
-                getResources().getDrawable(R.drawable.ic_media_play_symbol_white));
+        if (mState == StateManager.PLAYING) {
+            mImagePlay.setImageResource(R.drawable.ic_pause_button_white);
+        } else {
+            mImagePlay.setImageResource(R.drawable.ic_media_play_symbol_white);
+        }
         mSeekbarPlay.setMax(Constants.DEFAULT_MAX_SEEK_BAR);
         mSeekbarPlay.setProgress(0);
         mSeekbarPlay.setOnSeekBarChangeListener(this);
