@@ -1,12 +1,24 @@
 package com.framgia.thaihn.tmusic.service;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
+import android.support.v4.app.TaskStackBuilder;
 
+import com.framgia.thaihn.tmusic.R;
 import com.framgia.thaihn.tmusic.data.model.Song;
+import com.framgia.thaihn.tmusic.screen.detail.DetailActivity;
+import com.framgia.thaihn.tmusic.screen.main.MainActivity;
 import com.framgia.thaihn.tmusic.util.Constants;
 import com.framgia.thaihn.tmusic.util.music.MediaListener;
 import com.framgia.thaihn.tmusic.util.music.MusicManager;
@@ -20,10 +32,22 @@ public class MusicService extends Service implements MediaListener.ServiceListen
     public static final String INTENT_ACTION_PLAY_PAUSE_MUSIC = "PLAY_PAUSE_MUSIC";
     public static final String INTENT_ACTION_NEXT_MUSIC = "NEXT_MUSIC";
     public static final String INTENT_ACTION_PREVIOUS_MUSIC = "PREVIOUS_MUSIC";
+    public static final String INTENT_ACTION_OPEN_APP = "OPEN_APP";
+    public static final String CHANNEL_ID = "Music";
+    private static final int ORDER_ACTION_PREVIOUS = 0;
+    private static final int ORDER_ACTION_PLAY_PAUSE = 1;
+    private static final int ORDER_ACTION_NEXT = 2;
+    public static final int DEFAULT_ID_NOTIFICATION = 999;
 
     private MusicManager mMusicManager;
     private final IBinder mMusicBinder = new MusicBinder();
     private MediaListener.ServiceListener mServiceListener;
+    private PendingIntent mPendingNext;
+    private PendingIntent mPendingPrevious;
+    private PendingIntent mPendingPlay;
+    private PendingIntent mPendingItem;
+    private NotificationCompat.Builder mBuilder;
+    private NotificationManagerCompat mNotificationManager;
 
     public void setServiceListener(MediaListener.ServiceListener serviceListener) {
         mServiceListener = serviceListener;
@@ -38,6 +62,8 @@ public class MusicService extends Service implements MediaListener.ServiceListen
     @Override
     public void onCreate() {
         super.onCreate();
+        mNotificationManager = NotificationManagerCompat.from(this);
+        createNotificationChannel();
         mMusicManager = new MusicManager(this);
         mMusicManager.setServiceListener(this);
     }
@@ -102,40 +128,54 @@ public class MusicService extends Service implements MediaListener.ServiceListen
         return mMusicManager == null ? StateManager.PREPARE : mMusicManager.getState();
     }
 
+    public String getTitleSong() {
+        return mMusicManager == null ? null : mMusicManager.getTitle();
+    }
+
+    public String getSingerSong() {
+        return mMusicManager == null ? null : mMusicManager.getNameSinger();
+    }
+
     @Override
     public void eventPause() {
         if (mServiceListener == null) return;
         mServiceListener.eventPause();
+        updateNotification();
     }
 
     @Override
     public void eventPlay() {
         if (mServiceListener == null) return;
         mServiceListener.eventPlay();
+        updateNotification();
     }
 
     @Override
     public void eventPlayFail(String message) {
         if (mServiceListener == null) return;
         mServiceListener.eventPlayFail(message);
+        updateNotification();
     }
 
     @Override
     public void eventPrevious() {
         if (mServiceListener == null) return;
         mServiceListener.eventPrevious();
+        updateNotification();
     }
 
     @Override
     public void eventPreviousFail(String message) {
         if (mServiceListener == null) return;
         mServiceListener.eventPreviousFail(message);
+        updateNotification();
     }
 
     @Override
     public void eventNext() {
         if (mServiceListener == null) return;
         mServiceListener.eventNext();
+        updateNotification();
     }
 
     @Override
@@ -165,6 +205,7 @@ public class MusicService extends Service implements MediaListener.ServiceListen
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if (mMusicManager == null) return;
         mMusicManager.destroy();
     }
 
@@ -179,6 +220,7 @@ public class MusicService extends Service implements MediaListener.ServiceListen
         switch (action) {
             case INTENT_ACTION_START_MUSIC: {
                 if (intent.getExtras() != null) {
+                    createNotification();
                     int position = intent.getIntExtra(Constants.BUNDLE_POSITION_SONG, 0);
                     List<Song> list = intent.getParcelableArrayListExtra(Constants.BUNDLE_LIST_MUSIC_PLAY);
                     playMusic(list, position);
@@ -186,14 +228,91 @@ public class MusicService extends Service implements MediaListener.ServiceListen
                 break;
             }
             case INTENT_ACTION_NEXT_MUSIC: {
+                playNextMusic();
+                updateNotification();
                 break;
             }
             case INTENT_ACTION_PREVIOUS_MUSIC: {
+                playPreviousMusic();
+                updateNotification();
                 break;
             }
             case INTENT_ACTION_PLAY_PAUSE_MUSIC: {
+                chooseState();
+                updateNotification();
                 break;
             }
         }
+    }
+
+    private void createNotificationChannel() {
+        CharSequence name = "Music";
+        int importance = NotificationManager.IMPORTANCE_LOW;
+        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationChannel mChannel = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
+            manager.createNotificationChannel(mChannel);
+        }
+    }
+
+    private void createNotification() {
+        Intent intentItem = new Intent(this, DetailActivity.class);
+        intentItem.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intentItem.setAction(INTENT_ACTION_OPEN_APP);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addNextIntentWithParentStack(intentItem);
+        mPendingItem = stackBuilder.getPendingIntent(
+                0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Intent intentNext = new Intent(this, MusicService.class);
+        intentNext.setAction(INTENT_ACTION_NEXT_MUSIC);
+        mPendingNext = PendingIntent.getService(this,
+                0, intentNext, 0);
+
+        Intent intentPrevious = new Intent(this, MusicService.class);
+        intentPrevious.setAction(INTENT_ACTION_PREVIOUS_MUSIC);
+        mPendingPrevious = PendingIntent.getService(this,
+                0, intentPrevious, 0);
+
+        Intent intentPlay = new Intent(this, MusicService.class);
+        intentPlay.setAction(INTENT_ACTION_PLAY_PAUSE_MUSIC);
+        mPendingPlay = PendingIntent.getService(this,
+                0, intentPlay, 0);
+        updateNotification();
+    }
+
+    private void updateNotification() {
+        if (mMusicManager == null) return;
+        if (mMusicManager.getState() == StateManager.PLAYING) {
+            startForeground(DEFAULT_ID_NOTIFICATION, buildNotification());
+        } else {
+            mNotificationManager.notify(DEFAULT_ID_NOTIFICATION, buildNotification());
+            stopForeground(false);
+        }
+    }
+
+    /**
+     * Build notification with param and action
+     *
+     * @return
+     */
+    private Notification buildNotification() {
+        int iconPlayPause = mMusicManager.getState() == StateManager.PAUSE ?
+                R.drawable.ic_media_play_symbol_white : R.drawable.ic_pause_button_white;
+        mBuilder = new NotificationCompat.Builder(this)
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                .setContentTitle(getTitleSong())
+                .setContentText(getSingerSong())
+                .setSmallIcon(R.drawable.ic_music_player)
+                .setContentIntent(mPendingItem)
+                .addAction(R.drawable.ic_previous_white, "", mPendingPrevious)
+                .addAction(iconPlayPause, "", mPendingPlay)
+                .addAction(R.drawable.ic_next_white, "", mPendingNext)
+                .setStyle(new android.support.v4.media.app.NotificationCompat.MediaStyle()
+                        .setShowActionsInCompactView(ORDER_ACTION_PREVIOUS,
+                                ORDER_ACTION_PLAY_PAUSE, ORDER_ACTION_NEXT));
+        Notification notification = mBuilder.build();
+        return notification;
     }
 }
