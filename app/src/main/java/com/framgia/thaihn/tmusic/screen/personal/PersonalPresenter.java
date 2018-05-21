@@ -7,7 +7,7 @@ import com.framgia.thaihn.tmusic.data.source.SongDataSource;
 import java.util.List;
 
 public class PersonalPresenter implements PersonalContract.Presenter,
-        SongDataSource.OnGetDataLocalListener<Song> {
+        SongDataSource.OnGetDataListener<Song> {
 
     private PersonalContract.View mView;
     private SongRepository mSongRepository;
@@ -36,13 +36,13 @@ public class PersonalPresenter implements PersonalContract.Presenter,
     }
 
     @Override
-    public void onGetDataLocalSuccess(List<Song> list) {
+    public void onGetDataSuccess(List<Song> list) {
         mView.hideProgress();
         mView.showDataOffline(list);
     }
 
     @Override
-    public void onGetDataLocalError(String message) {
+    public void onGetDataError(String message) {
         mView.hideProgress();
         mView.showDataError(message);
     }

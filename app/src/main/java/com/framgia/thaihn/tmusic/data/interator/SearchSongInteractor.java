@@ -3,7 +3,7 @@ package com.framgia.thaihn.tmusic.data.interator;
 import android.os.AsyncTask;
 
 import com.framgia.thaihn.tmusic.data.model.Song;
-import com.framgia.thaihn.tmusic.data.source.SearchDataSource;
+import com.framgia.thaihn.tmusic.data.source.SongDataSource;
 import com.framgia.thaihn.tmusic.util.Constants;
 
 import org.json.JSONArray;
@@ -16,9 +16,9 @@ import java.util.List;
 
 public class SearchSongInteractor {
 
-    protected SearchDataSource.OnSearchDataListener<Song> mListener;
+    protected SongDataSource.OnGetDataListener<Song> mListener;
 
-    public SearchSongInteractor(SearchDataSource.OnSearchDataListener<Song> listener) {
+    public SearchSongInteractor(SongDataSource.OnGetDataListener<Song> listener) {
         this.mListener = listener;
     }
 
@@ -49,9 +49,9 @@ public class SearchSongInteractor {
             super.onPostExecute(songs);
             if (mListener == null) return;
             if (songs != null) {
-                mListener.onSearchDataSuccess(songs);
+                mListener.onGetDataSuccess(songs);
             } else {
-                mListener.onSearchDataError(Constants.ERROR_NO_DATA);
+                mListener.onGetDataError(Constants.ERROR_NO_DATA);
             }
         }
     }

@@ -15,6 +15,8 @@ public interface SongDataSource {
 
         void getAllSongsRemote(int limit, int offset,
                                OnFetchDataListener<Song> listener);
+
+        void searchSong(String url, SongDataSource.OnGetDataListener<Song> listener);
     }
 
     interface OnFetchDataListener<T> {
@@ -25,14 +27,14 @@ public interface SongDataSource {
 
     interface LocalDataSource {
         void getAllSongLocal(
-                SongDataSource.OnGetDataLocalListener<Song> listener);
+                OnGetDataListener<Song> listener);
 
         void getSongDownload();
     }
 
-    interface OnGetDataLocalListener<T> {
-        void onGetDataLocalSuccess(List<T> list);
+    interface OnGetDataListener<T> {
+        void onGetDataSuccess(List<T> list);
 
-        void onGetDataLocalError(String message);
+        void onGetDataError(String message);
     }
 }

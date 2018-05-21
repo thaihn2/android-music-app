@@ -144,7 +144,7 @@ public class MusicManager implements MediaPlayer.OnPreparedListener,
         mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         mMediaPlayer.setOnCompletionListener(this);
         try {
-            mMediaPlayer.setDataSource(Utils.createUri(mSongs.get(mCurrentPosition).getUri()));
+            mMediaPlayer.setDataSource(mSongs.get(mCurrentPosition).getUri());
             mMediaPlayer.prepareAsync();
             mMediaPlayer.setOnPreparedListener(this);
         } catch (IOException e) {
@@ -179,6 +179,18 @@ public class MusicManager implements MediaPlayer.OnPreparedListener,
     public int getCurrentDuration() {
         if (mMediaPlayer == null) return Constants.ERROR_DURATION;
         return mMediaPlayer.getCurrentPosition();
+    }
+
+    public String getTitle() {
+        if (mMediaPlayer == null) return null;
+        if (mSongs == null && mSongs.size() == 0) return null;
+        return mSongs.get(mCurrentPosition).getTitle();
+    }
+
+    public String getNameSinger() {
+        if (mMediaPlayer == null) return null;
+        if (mSongs == null && mSongs.size() == 0) return null;
+        return mSongs.get(mCurrentPosition).getUsername();
     }
 
     @Override

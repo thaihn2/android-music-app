@@ -34,7 +34,7 @@ public class GetSongLocalInteractor {
      *
      * @return
      */
-    public void getAllSong(SongDataSource.OnGetDataLocalListener<Song> listener) {
+    public void getAllSong(SongDataSource.OnGetDataListener<Song> listener) {
         Uri uri = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
         String[] projections = new String[]{
                 MediaStore.Audio.AudioColumns.TITLE,
@@ -56,9 +56,9 @@ public class GetSongLocalInteractor {
      * @return
      */
     private void getSongFromCursor(Cursor cursor,
-                                   SongDataSource.OnGetDataLocalListener<Song> listener) {
+                                   SongDataSource.OnGetDataListener<Song> listener) {
         if (cursor == null) {
-            listener.onGetDataLocalError(null);
+            listener.onGetDataError(null);
             return;
         }
         List<Song> list = new ArrayList<>();
@@ -77,6 +77,6 @@ public class GetSongLocalInteractor {
             list.add(song);
         }
         cursor.close();
-        listener.onGetDataLocalSuccess(list);
+        listener.onGetDataSuccess(list);
     }
 }
