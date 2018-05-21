@@ -21,4 +21,12 @@ public abstract class BaseFragment extends Fragment {
         initData(savedInstanceState);
         return rootView;
     }
+
+    public BaseActivity getBaseActivity(){
+        if (getActivity() instanceof BaseActivity){
+            return (BaseActivity) getActivity();
+        }
+        return null;
+    }
+
 }

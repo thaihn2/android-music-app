@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.framgia.thaihn.tmusic.R;
 import com.framgia.thaihn.tmusic.data.model.Song;
 import com.framgia.thaihn.tmusic.widget.CircleImageView;
@@ -17,9 +18,14 @@ import java.util.List;
 public class PersonalAdapter extends RecyclerView.Adapter<PersonalAdapter.ViewHolder> {
 
     private List<Song> mSongs;
+    private OnPersonalClick mOnPersonalClick;
 
     public PersonalAdapter(List<Song> list) {
         this.mSongs = list;
+    }
+
+    public void setOnPersonalClick(OnPersonalClick onPersonalClick) {
+        mOnPersonalClick = onPersonalClick;
     }
 
     @NonNull
@@ -27,7 +33,8 @@ public class PersonalAdapter extends RecyclerView.Adapter<PersonalAdapter.ViewHo
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View layoutItem = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_song_offline, parent, false);
-        PersonalAdapter.ViewHolder viewHolder = new PersonalAdapter.ViewHolder(layoutItem);
+        PersonalAdapter.ViewHolder viewHolder =
+                new PersonalAdapter.ViewHolder(layoutItem, mOnPersonalClick);
         return viewHolder;
     }
 
@@ -46,24 +53,35 @@ public class PersonalAdapter extends RecyclerView.Adapter<PersonalAdapter.ViewHo
         private TextView mTextTitle, mTextSinger;
         private CircleImageView mImageAvatar;
         private ImageView mImageMore;
+        private OnPersonalClick mOnPersonalClick;
 
-        public ViewHolder(View view) {
+        public ViewHolder(View view, OnPersonalClick listener) {
             super(view);
             mTextTitle = view.findViewById(R.id.text_name);
             mTextSinger = view.findViewById(R.id.text_singer);
             mImageAvatar = view.findViewById(R.id.image_avatar_offline);
             mImageMore = view.findViewById(R.id.image_more);
             mImageMore.setOnClickListener(this);
+            itemView.setOnClickListener(this);
+            this.mOnPersonalClick = listener;
         }
 
         public void setData(Song song) {
             if (song == null) return;
             mTextTitle.setText(song.getTitle());
             mTextSinger.setText(song.getUsername());
+            Glide.with(mImageAvatar.getContext())
+                    .load(R.drawable.ic_music_player)
+                    .into(mImageAvatar);
         }
 
         @Override
         public void onClick(View v) {
+            if (v == itemView) {
+                mOnPersonalClick.onPersonalClicked(getAdapterPosition());
+            } else if (v == mImageMore) {
+                mOnPersonalClick.onMoreClicked(getAdapterPosition());
+            }
         }
     }
 
@@ -73,5 +91,11 @@ public class PersonalAdapter extends RecyclerView.Adapter<PersonalAdapter.ViewHo
 
     public void setSongs(List<Song> songs) {
         mSongs = songs;
+    }
+
+    public interface OnPersonalClick {
+        void onPersonalClicked(int position);
+
+        void onMoreClicked(int position);
     }
 }

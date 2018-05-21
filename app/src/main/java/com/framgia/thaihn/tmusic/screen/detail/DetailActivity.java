@@ -93,9 +93,18 @@ public class DetailActivity extends BaseActivity
 
     @Override
     protected void initData(Bundle savedInstanceState) {
-        changeColorStatusBar();
+
     }
 
+    @Override
+    public void changeColorStatusBar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(getResources().getColor(R.color.color_chocolate));
+        }
+    }
 
     @Override
     public void onClick(View v) {
@@ -321,18 +330,6 @@ public class DetailActivity extends BaseActivity
         mSeekbarPlay.setMax(Constants.DEFAULT_MAX_SEEK_BAR);
         mSeekbarPlay.setProgress(0);
         mSeekbarPlay.setOnSeekBarChangeListener(this);
-    }
-
-    /**
-     * Change color of status bar
-     */
-    private void changeColorStatusBar() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = getWindow();
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(getResources().getColor(R.color.color_chocolate));
-        }
     }
 
     /**

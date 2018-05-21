@@ -20,7 +20,9 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PersonalFragment extends BaseFragment implements PersonalContract.View {
+public class PersonalFragment extends BaseFragment
+        implements PersonalContract.View,
+        PersonalAdapter.OnPersonalClick {
 
     private PersonalContract.Presenter mPresenter;
 
@@ -75,6 +77,16 @@ public class PersonalFragment extends BaseFragment implements PersonalContract.V
     public void hideProgress() {
     }
 
+    @Override
+    public void onPersonalClicked(int position) {
+        if (getBaseActivity() == null) return;
+        getBaseActivity().gotoPlayMusic(position, mPersonalAdapter.getSongs());
+    }
+
+    @Override
+    public void onMoreClicked(int position) {
+    }
+
     private void configRecycle(Context context) {
         LinearLayoutManager layoutManager = new LinearLayoutManager(
                 context,
@@ -83,6 +95,7 @@ public class PersonalFragment extends BaseFragment implements PersonalContract.V
         mRecycleMusicOffline.setHasFixedSize(true);
         mPersonalAdapter = new PersonalAdapter(new ArrayList<Song>());
         mRecycleMusicOffline.setLayoutManager(layoutManager);
+        mPersonalAdapter.setOnPersonalClick(this);
         mRecycleMusicOffline.setAdapter(mPersonalAdapter);
         mPersonalAdapter.notifyDataSetChanged();
     }
