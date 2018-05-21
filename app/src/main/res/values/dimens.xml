@@ -49,4 +49,5 @@
 
     <dimen name="padding_bottom_home">60dp</dimen>
     <dimen name="detail_max_height_seek_bar">1.5dp</dimen>
+    <dimen name="item_search_margin_top">10dp</dimen>
 </resources>

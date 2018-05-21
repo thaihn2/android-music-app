@@ -144,7 +144,7 @@ public class MusicManager implements MediaPlayer.OnPreparedListener,
         mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         mMediaPlayer.setOnCompletionListener(this);
         try {
-            mMediaPlayer.setDataSource(Utils.createUri(mSongs.get(mCurrentPosition).getUri()));
+            mMediaPlayer.setDataSource(mSongs.get(mCurrentPosition).getUri());
             mMediaPlayer.prepareAsync();
             mMediaPlayer.setOnPreparedListener(this);
         } catch (IOException e) {

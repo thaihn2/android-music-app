@@ -19,8 +19,8 @@
 
         <activity
             android:name=".screen.main.MainActivity"
-            android:windowSoftInputMode="adjustResize"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,5 +30,7 @@
         <activity
             android:name=".screen.detail.DetailActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".screen.search.SearchActivity"></activity>
     </application>
+
 </manifest>
