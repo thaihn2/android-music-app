@@ -134,12 +134,13 @@ public class MusicManager implements MediaPlayer.OnPreparedListener,
             return;
         }
         reset();
-        // update progress
-        if (mServiceListener != null) {
-            mServiceListener.removeUpdateSeekBar();
-        }
+
         setState(StateManager.PREPARE);
         loadSong();
+
+        if (mServiceListener == null) return;
+        mServiceListener.removeUpdateSeekBar();
+        mServiceListener.eventPrepare();
     }
 
     /**
@@ -239,6 +240,8 @@ public class MusicManager implements MediaPlayer.OnPreparedListener,
         if (mMediaPlayer == null) return;
         mMediaPlayer.pause();
         setState(StateManager.PAUSE);
+        if (mServiceListener == null) return;
+        mServiceListener.eventPause();
     }
 
 
@@ -246,6 +249,8 @@ public class MusicManager implements MediaPlayer.OnPreparedListener,
         if (mMediaPlayer == null) return;
         mMediaPlayer.start();
         setState(StateManager.PLAYING);
+        if (mServiceListener == null) return;
+        mServiceListener.eventPlay();
     }
 
     /**

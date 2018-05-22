@@ -16,7 +16,7 @@
     <com.framgia.thaihn.tmusic.widget.CircleImageView
         android:layout_width="@dimen/nav_header_height_avatar"
         android:layout_height="@dimen/nav_header_width_avatar"
-        android:src="@mipmap/app_icon"
+        android:src="@drawable/ic_music_player_large"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

@@ -48,8 +48,9 @@ public class SongRepository implements SongDataSource.RemoteDataSource,
     }
 
     @Override
-    public void getSongDownload() {
-
+    public void getSongDownload(SongDataSource.OnGetDataListener<Song> listener) {
+        if (mLocalDataSource == null) return;
+        mLocalDataSource.getSongDownload(listener);
     }
 
     @Override

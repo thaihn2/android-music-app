@@ -146,6 +146,14 @@ public class DetailActivity extends BaseActivity
                 updateLoop();
                 break;
             }
+            case R.id.image_share: {
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, mSongs.get(mPosition).getUri());
+                sendIntent.setType("text/plain");
+                startActivity(sendIntent);
+                break;
+            }
         }
     }
 
@@ -193,6 +201,7 @@ public class DetailActivity extends BaseActivity
         }
         if (mSongs == null) return;
         loadUi(mSongs.get(mPosition));
+        removeUpdateSeekBar();
     }
 
     @Override

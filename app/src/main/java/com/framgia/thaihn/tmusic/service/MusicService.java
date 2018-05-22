@@ -35,6 +35,7 @@ public class MusicService extends Service implements MediaListener.ServiceListen
     public static final String INTENT_ACTION_OPEN_APP = "OPEN_APP";
     public static final String CHANNEL_ID = "Music";
     public static final String CHANNEL_NAME = "TMUsic";
+
     private static final int ORDER_ACTION_PREVIOUS = 0;
     private static final int ORDER_ACTION_PLAY_PAUSE = 1;
     private static final int ORDER_ACTION_NEXT = 2;
@@ -68,6 +69,7 @@ public class MusicService extends Service implements MediaListener.ServiceListen
         phoneListener();
         mNotificationManager = NotificationManagerCompat.from(this);
         createNotificationChannel();
+        createNotification();
         mMusicManager = new MusicManager(this);
         mMusicManager.setServiceListener(this);
     }
@@ -143,13 +145,11 @@ public class MusicService extends Service implements MediaListener.ServiceListen
     public void pauseMusic() {
         if (mMusicManager == null) return;
         mMusicManager.pause();
-        updateNotification();
     }
 
     public void startMusic() {
         if (mMusicManager == null) return;
         mMusicManager.start();
-        updateNotification();
     }
 
     @Override
@@ -247,7 +247,6 @@ public class MusicService extends Service implements MediaListener.ServiceListen
                     int position = intent.getIntExtra(Constants.BUNDLE_POSITION_SONG, 0);
                     List<Song> list = intent.getParcelableArrayListExtra(Constants.BUNDLE_LIST_MUSIC_PLAY);
                     playMusic(list, position);
-                    createNotification();
                 }
                 break;
             }
@@ -302,6 +301,7 @@ public class MusicService extends Service implements MediaListener.ServiceListen
         intentPlay.setAction(INTENT_ACTION_PLAY_PAUSE_MUSIC);
         mPendingPlay = PendingIntent.getService(this,
                 0, intentPlay, 0);
+        updateNotification();
     }
 
     private void updateNotification() {

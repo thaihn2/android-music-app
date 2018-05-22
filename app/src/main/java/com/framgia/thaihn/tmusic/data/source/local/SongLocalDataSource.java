@@ -16,7 +16,7 @@ public class SongLocalDataSource implements SongDataSource.LocalDataSource {
     }
 
     private SongLocalDataSource(Context context) {
-        mGetSongLocalInteractor = new GetSongLocalInteractor(context);
+        mGetSongLocalInteractor = GetSongLocalInteractor.newInstance(context);
     }
 
     public static void getContext(Context context) {
@@ -27,11 +27,13 @@ public class SongLocalDataSource implements SongDataSource.LocalDataSource {
 
     @Override
     public void getAllSongLocal(SongDataSource.OnGetDataListener<Song> listener) {
+        if (mGetSongLocalInteractor == null) return;
         mGetSongLocalInteractor.getAllSong(listener);
     }
 
     @Override
-    public void getSongDownload() {
-
+    public void getSongDownload(SongDataSource.OnGetDataListener<Song> listener) {
+        if (mGetSongLocalInteractor != null) return;
+        mGetSongLocalInteractor.getSongDownload(listener);
     }
 }

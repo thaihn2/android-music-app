@@ -3,11 +3,14 @@ package com.framgia.thaihn.tmusic.data.interator;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
 
 import com.framgia.thaihn.tmusic.data.model.Song;
 import com.framgia.thaihn.tmusic.data.source.SongDataSource;
+import com.framgia.thaihn.tmusic.service.DownloadMusicService;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,6 +51,26 @@ public class GetSongLocalInteractor {
                 MediaStore.Audio.Media.IS_MUSIC + IS_MUSIC_CONDITION,
                 null, null);
         getSongFromCursor(cursor, listener);
+    }
+
+    public void getSongDownload(SongDataSource.OnGetDataListener<Song> listener) {
+        List<Song> list = new ArrayList<>();
+
+        String rootPath = Environment.getExternalStorageDirectory().toString()
+                + DownloadMusicService.FOLDER_MUSIC;
+        File rootFolder = new File(rootPath);
+        File[] files = rootFolder.listFiles();
+        for (File file : files) {
+            if (file.getName().endsWith(DownloadMusicService.END_OF_FILE_MUSIC)) {
+                Song song = new Song();
+                song.setTitle(file.getName());
+                song.setUri(file.getAbsolutePath());
+                if (song != null) {
+                    list.add(song);
+                }
+            }
+        }
+        listener.onGetDataSuccess(list);
     }
 
     /**

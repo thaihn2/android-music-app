@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -155,8 +156,6 @@ public class MainActivity extends BaseActivity implements
 
     @Override
     public void eventPrepare() {
-        checkStatusPlayer(mState);
-        loadUiSmallPlayer(mSongs.get(mPosition));
     }
 
     @Override
@@ -166,8 +165,9 @@ public class MainActivity extends BaseActivity implements
 
     @Override
     public void eventPlay() {
-        checkStatusPlayer(mState);
+        mViewSmallPlayer.setVisibility(View.VISIBLE);
         if (mSongs == null || mSongs.size() == 0) return;
+        loadUiSmallPlayer(mSongs.get(mPosition));
         mImagePlay.setImageDrawable(getResources().getDrawable(R.drawable.ic_pause_button_white));
     }
 
@@ -290,6 +290,13 @@ public class MainActivity extends BaseActivity implements
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         switchTab(item.getItemId());
+        switch (item.getItemId()) {
+            case R.id.menu_rate: {
+                startActivity(new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("https://play.google.com/store/apps/details")));
+                break;
+            }
+        }
         mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -342,9 +349,8 @@ public class MainActivity extends BaseActivity implements
     }
 
     private void checkStatusPlayer(int status) {
-        if (status == StateManager.PLAYING || status == StateManager.PAUSE
-                || status == StateManager.PREPARE) {
-            mViewSmallPlayer.setVisibility(View.VISIBLE);
+        if (status == StateManager.PLAYING || status == StateManager.PAUSE) {
+
         } else {
             mViewSmallPlayer.setVisibility(View.GONE);
         }

@@ -69,7 +69,9 @@ public class PersonalAdapter extends RecyclerView.Adapter<PersonalAdapter.ViewHo
         public void setData(Song song) {
             if (song == null) return;
             mTextTitle.setText(song.getTitle());
-            mTextSinger.setText(song.getUsername());
+            if (song.getUsername() != null) {
+                mTextSinger.setText(song.getUsername());
+            }
             if (song.getArtworkUrl() == null) {
                 mImageAvatar.setImageResource(R.drawable.ic_music_player);
             } else {

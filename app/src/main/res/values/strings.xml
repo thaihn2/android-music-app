@@ -17,4 +17,8 @@
     <string name="error_get_song_from_sd_card">Can\'t get song from SD Card</string>
     <string name="str_hint_search_view">Enter text in here</string>
     <string name="error_no_internet">Connect internet to continue</string>
+    <string name="str_downloading">Downloading</string>
+    <string name="str_download_complete">Download complete</string>
+    <string name="str_download_error">Download fail</string>
+    <string name="str_rate_me">Rate</string>
 </resources>

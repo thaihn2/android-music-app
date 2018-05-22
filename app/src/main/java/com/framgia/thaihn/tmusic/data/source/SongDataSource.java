@@ -29,7 +29,7 @@ public interface SongDataSource {
         void getAllSongLocal(
                 OnGetDataListener<Song> listener);
 
-        void getSongDownload();
+        void getSongDownload(OnGetDataListener<Song> listener);
     }
 
     interface OnGetDataListener<T> {
