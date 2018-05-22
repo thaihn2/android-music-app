@@ -154,6 +154,12 @@ public class MainActivity extends BaseActivity implements
     }
 
     @Override
+    public void eventPrepare() {
+        checkStatusPlayer(mState);
+        loadUiSmallPlayer(mSongs.get(mPosition));
+    }
+
+    @Override
     public void eventPause() {
         mImagePlay.setImageDrawable(getResources().getDrawable(R.drawable.ic_media_play_symbol_white));
     }
@@ -162,7 +168,6 @@ public class MainActivity extends BaseActivity implements
     public void eventPlay() {
         checkStatusPlayer(mState);
         if (mSongs == null || mSongs.size() == 0) return;
-        loadUiSmallPlayer(mSongs.get(mPosition));
         mImagePlay.setImageDrawable(getResources().getDrawable(R.drawable.ic_pause_button_white));
     }
 

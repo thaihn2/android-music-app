@@ -105,7 +105,7 @@
         android:text="@string/time_default"
         android:textColor="@android:color/white"
         android:textSize="@dimen/detail_text_size_time"
-        app:layout_constraintBottom_toTopOf="@id/image_random"
+        app:layout_constraintBottom_toTopOf="@id/image_suffer"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/seek_bar" />
 
@@ -134,7 +134,7 @@
         app:layout_constraintRight_toRightOf="parent" />
 
     <ImageView
-        android:id="@+id/image_random"
+        android:id="@+id/image_suffer"
         android:layout_width="@dimen/detail_width_icon"
         android:layout_height="@dimen/detail_width_icon"
         android:layout_marginBottom="@dimen/detail_margin_bottom"
@@ -155,7 +155,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/image_play"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/image_random" />
+        app:layout_constraintStart_toEndOf="@+id/image_suffer" />
 
     <ImageView
         android:id="@+id/image_play"
@@ -187,7 +187,7 @@
         android:layout_height="@dimen/detail_width_icon"
         android:layout_marginBottom="@dimen/detail_margin_bottom"
         android:padding="@dimen/detail_padding_image"
-        android:src="@drawable/ic_loop_white"
+        android:src="@drawable/ic_repeat_white_24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

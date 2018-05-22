@@ -153,6 +153,13 @@ public class MusicService extends Service implements MediaListener.ServiceListen
     }
 
     @Override
+    public void eventPrepare() {
+        if (mServiceListener == null) return;
+        mServiceListener.eventPrepare();
+        updateNotification();
+    }
+
+    @Override
     public void eventPause() {
         if (mServiceListener == null) return;
         mServiceListener.eventPause();

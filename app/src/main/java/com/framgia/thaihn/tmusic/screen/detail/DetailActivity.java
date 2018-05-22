@@ -25,6 +25,7 @@ import com.framgia.thaihn.tmusic.data.model.Song;
 import com.framgia.thaihn.tmusic.service.DownloadMusicService;
 import com.framgia.thaihn.tmusic.service.MusicService;
 import com.framgia.thaihn.tmusic.util.Constants;
+import com.framgia.thaihn.tmusic.util.PreferencesUtils;
 import com.framgia.thaihn.tmusic.util.StringUtils;
 import com.framgia.thaihn.tmusic.util.ToastUtils;
 import com.framgia.thaihn.tmusic.util.Utils;
@@ -56,7 +57,7 @@ public class DetailActivity extends BaseActivity
     private ScheduledExecutorService mScheduledExecutorService;
 
     private ImageView mImageAvatar, mImageLike, mImageDownload, mImageShare,
-            mImageRandom, mImagePrevious, mImagePlay, mImageNext, mImageLoop;
+            mImageSuffer, mImagePrevious, mImagePlay, mImageNext, mImageLoop;
     private TextView mTextNameSong, mTextNameSinger, mTextTimeProgress, mTextDuration;
     private SeekBar mSeekbarPlay;
 
@@ -71,7 +72,7 @@ public class DetailActivity extends BaseActivity
         mImageLike = findViewById(R.id.image_like);
         mImageDownload = findViewById(R.id.image_download);
         mImageShare = findViewById(R.id.image_share);
-        mImageRandom = findViewById(R.id.image_random);
+        mImageSuffer = findViewById(R.id.image_suffer);
         mImagePrevious = findViewById(R.id.image_previous);
         mImagePlay = findViewById(R.id.image_play);
         mImageNext = findViewById(R.id.image_next);
@@ -88,7 +89,7 @@ public class DetailActivity extends BaseActivity
         mImageLike.setOnClickListener(this);
         mImagePlay.setOnClickListener(this);
         mImageShare.setOnClickListener(this);
-        mImageRandom.setOnClickListener(this);
+        mImageSuffer.setOnClickListener(this);
         mImagePrevious.setOnClickListener(this);
         mImageNext.setOnClickListener(this);
     }
@@ -137,8 +138,30 @@ public class DetailActivity extends BaseActivity
                 }
                 break;
             }
+            case R.id.image_suffer: {
+                updateSuffer();
+                break;
+            }
+            case R.id.image_loop: {
+                updateLoop();
+                break;
+            }
         }
     }
+
+    private void updateLoop() {
+        if (PreferencesUtils.getPlayMode() == StateManager.LOOP_ALL) {
+            PreferencesUtils.savePlayMode(StateManager.LOOP_ONE);
+            mImageLoop.setImageResource(R.drawable.ic_repeat_one_white_24dp);
+        } else if (PreferencesUtils.getPlayMode() == StateManager.LOOP_ONE) {
+            PreferencesUtils.savePlayMode(StateManager.LOOP_DISABLE);
+            mImageLoop.setImageResource(R.drawable.ic_repeat_grey_24dp);
+        } else if (PreferencesUtils.getPlayMode() == StateManager.LOOP_DISABLE) {
+            PreferencesUtils.savePlayMode(StateManager.LOOP_ALL);
+            mImageLoop.setImageResource(R.drawable.ic_repeat_white_24dp);
+        }
+    }
+
 
     @Override
     protected void onStart() {
@@ -160,6 +183,16 @@ public class DetailActivity extends BaseActivity
             mMusicBound = false;
         }
         removeProgressUpdate();
+    }
+
+    @Override
+    public void eventPrepare() {
+        if (mMusicService != null) {
+            mPosition = mMusicService.getCurrentPosition();
+            mSongs = mMusicService.getSongs();
+        }
+        if (mSongs == null) return;
+        loadUi(mSongs.get(mPosition));
     }
 
     @Override
@@ -298,18 +331,6 @@ public class DetailActivity extends BaseActivity
         mTextNameSong.setText(song.getTitle());
         mTextNameSinger.setText(song.getUsername());
         mTextDuration.setText(Utils.calculatorDuration(song.getDuration()));
-        if (mState == StateManager.PLAYING) {
-            updateSeekBar();
-        } else if (mState == StateManager.PAUSE) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    calculatorProgress();
-                }
-            });
-        } else {
-            mTextTimeProgress.setText(getString(R.string.time_default));
-        }
         RequestOptions options = new RequestOptions()
                 .centerCrop()
                 .error(R.drawable.ic_music_player_large)
@@ -334,6 +355,30 @@ public class DetailActivity extends BaseActivity
         mSeekbarPlay.setMax(Constants.DEFAULT_MAX_SEEK_BAR);
         mSeekbarPlay.setProgress(0);
         mSeekbarPlay.setOnSeekBarChangeListener(this);
+
+        if (mState == StateManager.PLAYING) {
+            updateSeekBar();
+        } else if (mState == StateManager.PAUSE) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    calculatorProgress();
+                }
+            });
+        } else {
+            mTextTimeProgress.setText(getString(R.string.time_default));
+        }
+        updateSuffer();
+    }
+
+    private void updateSuffer() {
+        if (PreferencesUtils.getSuffer() == StateManager.SUFFER_OFF) {
+            mImageSuffer.setImageResource(R.drawable.ic_shuffle_grey);
+            PreferencesUtils.saveSuffer(StateManager.SUFFER_ON);
+        } else {
+            mImageSuffer.setImageResource(R.drawable.ic_shuffle_white);
+            PreferencesUtils.saveSuffer(StateManager.SUFFER_OFF);
+        }
     }
 
     /**

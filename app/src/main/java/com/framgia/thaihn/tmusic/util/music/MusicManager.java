@@ -7,9 +7,11 @@ import com.framgia.thaihn.tmusic.R;
 import com.framgia.thaihn.tmusic.data.model.Song;
 import com.framgia.thaihn.tmusic.service.MusicService;
 import com.framgia.thaihn.tmusic.util.Constants;
+import com.framgia.thaihn.tmusic.util.PreferencesUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class MusicManager implements MediaPlayer.OnPreparedListener,
@@ -19,8 +21,6 @@ public class MusicManager implements MediaPlayer.OnPreparedListener,
     private List<Song> mSongs;
     private int mCurrentPosition;
     private MusicService mMusicService;
-    @StateManager.StateLoop
-    private int mLoopType = StateManager.LOOP_DISABLE;
     @StateManager.StatePlay
     private int mState = StateManager.PREPARE;
     private MediaListener.ServiceListener mServiceListener;
@@ -91,13 +91,18 @@ public class MusicManager implements MediaPlayer.OnPreparedListener,
         prepareSong();
     }
 
+    private void playCurrentSong() {
+        if (mSongs == null || mSongs.size() == 0) return;
+        prepareSong();
+    }
+
     /**
      * Play next song if position is last and loop type is all
      */
     public void playNextSong() {
         if (mSongs == null || mSongs.size() == 0) return;
         if (mCurrentPosition == mSongs.size() - 1) {
-            if (mLoopType != StateManager.LOOP_ALL) {
+            if (PreferencesUtils.getPlayMode() != StateManager.LOOP_ALL) {
                 mServiceListener.eventNextFail(mMusicService.getString(R.string.error_end_of_list_song));
                 return;
             }
@@ -165,14 +170,6 @@ public class MusicManager implements MediaPlayer.OnPreparedListener,
         return mCurrentPosition;
     }
 
-    public void setLoopType(@StateManager.StateLoop int loopType) {
-        mLoopType = loopType;
-    }
-
-    public int getLoopType() {
-        return mLoopType;
-    }
-
     public void setState(@StateManager.StatePlay int state) {
         mState = state;
     }
@@ -204,18 +201,23 @@ public class MusicManager implements MediaPlayer.OnPreparedListener,
 
     @Override
     public void onCompletion(MediaPlayer mp) {
-        switch (mLoopType) {
+        switch (PreferencesUtils.getPlayMode()) {
             case StateManager.LOOP_DISABLE: {
-                // play next music
+                if (PreferencesUtils.getSuffer() == StateManager.SUFFER_ON) {
+                    Collections.shuffle(mSongs);
+                }
                 playNextSong();
                 break;
             }
             case StateManager.LOOP_ONE: {
-                // play again music
+                playCurrentSong();
                 break;
             }
             case StateManager.LOOP_ALL: {
-                // play next. if end of list start first list
+                if (PreferencesUtils.getSuffer() == StateManager.SUFFER_ON) {
+                    Collections.shuffle(mSongs);
+                }
+                playNextSong();
                 break;
             }
         }

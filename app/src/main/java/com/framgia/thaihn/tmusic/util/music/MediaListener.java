@@ -4,6 +4,8 @@ public interface MediaListener {
 
     interface ServiceListener {
 
+        void eventPrepare();
+
         void eventPause();
 
         void eventPlay();

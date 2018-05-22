@@ -9,9 +9,12 @@ public class StateManager {
     public static final int STOP = 3;
     public static final int ERROR = 4;
 
-    public static final int LOOP_DISABLE = 0;
-    public static final int LOOP_ALL = 1;
+    public static final int LOOP_ALL = 0;
+    public static final int LOOP_DISABLE = 1;
     public static final int LOOP_ONE = 2;
+
+    public static final int SUFFER_ON = 1;
+    public static final int SUFFER_OFF = 0;
 
     @IntDef({PREPARE, StateManager.PLAYING, StateManager.PAUSE, StateManager.STOP,
             StateManager.ERROR})
@@ -20,5 +23,9 @@ public class StateManager {
 
     @IntDef({LOOP_DISABLE, LOOP_ALL, LOOP_ONE})
     public @interface StateLoop {
+    }
+
+    @IntDef({SUFFER_ON, SUFFER_OFF})
+    public @interface StateSuffer {
     }
 }

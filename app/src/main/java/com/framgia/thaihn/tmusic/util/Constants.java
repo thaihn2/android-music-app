@@ -11,7 +11,6 @@ public final class Constants {
     public static final String SEARCH_FILTER = "?filter=public";
     public static final String SEARCH_PARAM = "q";
 
-
     public static final String STREAM = "stream";
     public static final String METHOD_GET = "GET";
     public static final String ERROR_NO_DATA = "Không có dữ liệu";
