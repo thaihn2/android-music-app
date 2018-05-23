@@ -1,10 +1,12 @@
 package com.framgia.thaihn.tmusic.screen.splash;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import com.framgia.thaihn.tmusic.BaseActivity;
 import com.framgia.thaihn.tmusic.R;
@@ -13,6 +15,7 @@ import com.framgia.thaihn.tmusic.screen.main.MainActivity;
 public class SplashActivity extends BaseActivity implements SplashContract.View {
 
     private SplashContract.Presenter mPresenter;
+    private TextView mTextSplash;
 
     @Override
     protected int getLayoutResources() {
@@ -21,11 +24,14 @@ public class SplashActivity extends BaseActivity implements SplashContract.View 
 
     @Override
     protected void initVariables(Bundle savedInstanceState) {
-
+        mTextSplash = findViewById(R.id.text_splash);
     }
 
     @Override
     protected void initData(Bundle savedInstanceState) {
+        mTextSplash.setText(R.string.str_text_splash);
+        Typeface type = Typeface.createFromAsset(getAssets(), "font.TTF");
+        mTextSplash.setTypeface(type);
         mPresenter = new SplashPresenter();
         mPresenter.setView(this);
         mPresenter.waitScreen();

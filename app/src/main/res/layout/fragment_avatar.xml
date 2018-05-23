@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.framgia.thaihn.tmusic.widget.CircleImageView
+        android:id="@+id/image_avatar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="@dimen/detail_margin_left_image_avatar"
+        android:layout_marginRight="@dimen/detail_margin_left_image_avatar"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/ic_loading" />
+</FrameLayout>

@@ -108,7 +108,7 @@ public class MainActivity extends BaseActivity implements
         // init fragment
         mGenreFragment = GenreFragment.newInstance();
         mPersonalFragment = PersonalFragment.newInstance();
-        mBottomTabMain.setSelectedItemId(R.id.menu_home);
+        mBottomTabMain.setSelectedItemId(R.id.menu_online);
         switchTab(mBottomTabMain.getSelectedItemId());
     }
 
@@ -294,6 +294,11 @@ public class MainActivity extends BaseActivity implements
                         Uri.parse("https://play.google.com/store/apps/details")));
                 break;
             }
+            case R.id.menu_home: {
+                mBottomTabMain.setSelectedItemId(R.id.menu_online);
+                break;
+            }
+
         }
         mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
@@ -314,7 +319,7 @@ public class MainActivity extends BaseActivity implements
      */
     private void switchTab(int id) {
         switch (id) {
-            case R.id.menu_home: {
+            case R.id.menu_online: {
                 FragmentUtils.replaceFragmentNotStack(
                         this,
                         mGenreFragment,
@@ -340,7 +345,7 @@ public class MainActivity extends BaseActivity implements
         if (song == null) return;
         mTextName.setText(song.getTitle());
         mTextSinger.setText(song.getUsername());
-        Glide.with(mImageAvatar.getContext())
+        Glide.with(this)
                 .load(song.getArtworkUrl())
                 .into(mImageAvatar);
         if (mState == StateManager.PLAYING) {

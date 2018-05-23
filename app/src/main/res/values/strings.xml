@@ -23,4 +23,9 @@
     <string name="str_rate_me">Rate</string>
     <string name="str_unknow"><![CDATA[<unknown>]]></string>
     <string name="str_no_data">No data!</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_download">Download</string>
+    <string name="str_text_splash">TMusic</string>
 </resources>

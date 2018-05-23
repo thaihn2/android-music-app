@@ -7,6 +7,7 @@ import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -15,10 +16,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.Priority;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
 import com.framgia.thaihn.tmusic.BaseActivity;
 import com.framgia.thaihn.tmusic.R;
 import com.framgia.thaihn.tmusic.data.model.Song;
@@ -26,11 +23,12 @@ import com.framgia.thaihn.tmusic.service.DownloadMusicService;
 import com.framgia.thaihn.tmusic.service.MusicService;
 import com.framgia.thaihn.tmusic.util.Constants;
 import com.framgia.thaihn.tmusic.util.PreferencesUtils;
-import com.framgia.thaihn.tmusic.util.StringUtils;
 import com.framgia.thaihn.tmusic.util.ToastUtils;
 import com.framgia.thaihn.tmusic.util.Utils;
 import com.framgia.thaihn.tmusic.util.music.MediaListener;
 import com.framgia.thaihn.tmusic.util.music.StateManager;
+import com.framgia.thaihn.tmusic.widget.CircleIndicator;
+import com.framgia.thaihn.tmusic.widget.DepthPageTransformer;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -55,11 +53,16 @@ public class DetailActivity extends BaseActivity
     private int mCurrentProgress;
     private ExecutorService mExecutorService;
     private ScheduledExecutorService mScheduledExecutorService;
+    private ViewPagerAdapter mAdapter;
+    private ListSongFragment mListSongFragment;
+    private AvatarFragment mAvatarFragment;
 
-    private ImageView mImageAvatar, mImageLike, mImageDownload, mImageShare,
+    private ImageView mImageLike, mImageDownload, mImageShare,
             mImageSuffer, mImagePrevious, mImagePlay, mImageNext, mImageLoop;
     private TextView mTextNameSong, mTextNameSinger, mTextTimeProgress, mTextDuration;
     private SeekBar mSeekbarPlay;
+    private ViewPager mViewPager;
+    private CircleIndicator mCircleIndicator;
 
     @Override
     protected int getLayoutResources() {
@@ -68,7 +71,6 @@ public class DetailActivity extends BaseActivity
 
     @Override
     protected void initVariables(Bundle savedInstanceState) {
-        mImageAvatar = findViewById(R.id.image_avatar);
         mImageLike = findViewById(R.id.image_like);
         mImageDownload = findViewById(R.id.image_download);
         mImageShare = findViewById(R.id.image_share);
@@ -82,6 +84,8 @@ public class DetailActivity extends BaseActivity
         mTextTimeProgress = findViewById(R.id.text_time_progress);
         mTextDuration = findViewById(R.id.text_duration);
         mSeekbarPlay = findViewById(R.id.seek_bar);
+        mViewPager = findViewById(R.id.viewpager);
+        mCircleIndicator = findViewById(R.id.indicator);
 
         findViewById(R.id.image_back).setOnClickListener(this);
         mImageDownload.setOnClickListener(this);
@@ -96,7 +100,10 @@ public class DetailActivity extends BaseActivity
 
     @Override
     protected void initData(Bundle savedInstanceState) {
-
+        mAvatarFragment = AvatarFragment.newInstance();
+        mListSongFragment = ListSongFragment.newInstance();
+        setupViewPager(mViewPager);
+        mCircleIndicator.setViewPager(mViewPager    );
     }
 
     @Override
@@ -340,15 +347,6 @@ public class DetailActivity extends BaseActivity
         mTextNameSong.setText(song.getTitle());
         mTextNameSinger.setText(song.getUsername());
         mTextDuration.setText(Utils.calculatorDuration(song.getDuration()));
-        RequestOptions options = new RequestOptions()
-                .centerCrop()
-                .error(R.drawable.ic_music_player_large)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .priority(Priority.HIGH);
-        Glide.with(mImageAvatar.getContext())
-                .applyDefaultRequestOptions(options)
-                .load(StringUtils.convertArtWorkUrlBetter(song.getArtworkUrl()))
-                .into(mImageAvatar);
         if (!song.isDownloadable()) {
             mImageDownload.setImageDrawable(
                     getResources().getDrawable(R.drawable.ic_download_grey));
@@ -378,6 +376,10 @@ public class DetailActivity extends BaseActivity
             mTextTimeProgress.setText(getString(R.string.time_default));
         }
         updateSuffer();
+        mListSongFragment.loadSongs(mSongs);
+        if (mSongs != null && mSongs.size() != 0) {
+            mAvatarFragment.loadImage(mSongs.get(mPosition).getArtworkUrl());
+        }
     }
 
     private void updateSuffer() {
@@ -437,5 +439,22 @@ public class DetailActivity extends BaseActivity
         mExecutorService.shutdownNow();
         mExecutorService = null;
         mScheduledExecutorService = null;
+    }
+
+    private void setupViewPager(ViewPager viewPager) {
+        mAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        mAdapter.addFragment(mListSongFragment);
+        mAdapter.addFragment(mAvatarFragment);
+        viewPager.setAdapter(mAdapter);
+        viewPager.setCurrentItem(1);
+        viewPager.setPageTransformer(true, new DepthPageTransformer());
+    }
+
+    public List<Song> getSongs() {
+        return mSongs;
+    }
+
+    public int getPosition() {
+        return mPosition;
     }
 }
