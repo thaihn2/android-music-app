@@ -96,11 +96,15 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
         mSearchAdapter.addData(list);
         if (mSearchAdapter.getItemCount() == 0) {
             showError(Constants.ERROR_NO_DATA);
+        } else {
+            mTextNotification.setVisibility(View.GONE);
+            mRecyclerSearch.setVisibility(View.VISIBLE);
         }
     }
 
     @Override
     public void showError(String message) {
+        mTextNotification.setVisibility(View.VISIBLE);
         mTextNotification.setText(message);
     }
 

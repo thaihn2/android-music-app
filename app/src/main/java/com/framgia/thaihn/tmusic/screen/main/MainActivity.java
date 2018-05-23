@@ -45,7 +45,6 @@ import java.util.List;
 public class MainActivity extends BaseActivity implements
         NavigationView.OnNavigationItemSelectedListener,
         BottomNavigationView.OnNavigationItemSelectedListener,
-        GenreFragment.OnItemSongListener,
         View.OnClickListener, MediaListener.ServiceListener {
 
     private Toolbar mToolbar;
@@ -109,7 +108,6 @@ public class MainActivity extends BaseActivity implements
         // init fragment
         mGenreFragment = GenreFragment.newInstance();
         mPersonalFragment = PersonalFragment.newInstance();
-        mGenreFragment.setOnItemSongListener(this);
         mBottomTabMain.setSelectedItemId(R.id.menu_home);
         switchTab(mBottomTabMain.getSelectedItemId());
     }
@@ -345,12 +343,16 @@ public class MainActivity extends BaseActivity implements
         Glide.with(mImageAvatar.getContext())
                 .load(song.getArtworkUrl())
                 .into(mImageAvatar);
-        mImagePlay.setImageResource(R.drawable.ic_media_play_symbol_white);
+        if (mState == StateManager.PLAYING) {
+            mImagePlay.setImageResource(R.drawable.ic_pause_button_white);
+        } else {
+            mImagePlay.setImageResource(R.drawable.ic_media_play_symbol_white);
+        }
     }
 
     private void checkStatusPlayer(int status) {
         if (status == StateManager.PLAYING || status == StateManager.PAUSE) {
-
+            mViewSmallPlayer.setVisibility(View.VISIBLE);
         } else {
             mViewSmallPlayer.setVisibility(View.GONE);
         }

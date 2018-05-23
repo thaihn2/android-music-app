@@ -21,4 +21,6 @@
     <string name="str_download_complete">Download complete</string>
     <string name="str_download_error">Download fail</string>
     <string name="str_rate_me">Rate</string>
+    <string name="str_unknow"><![CDATA[<unknown>]]></string>
+    <string name="str_no_data">No data!</string>
 </resources>

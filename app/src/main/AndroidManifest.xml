@@ -24,17 +24,22 @@
         <activity
             android:name=".screen.main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".screen.detail.DetailActivity"
+            android:parentActivityName=".screen.main.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".screen.search.SearchActivity" />
+        <activity android:name=".screen.more.MoreActivity" />
+        <activity
+            android:name=".screen.splash.SplashActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".screen.detail.DetailActivity"
-            android:parentActivityName=".screen.main.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".screen.search.SearchActivity"></activity>
     </application>
+
 </manifest>

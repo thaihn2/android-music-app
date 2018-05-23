@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.framgia.thaihn.tmusic.R;
@@ -54,6 +55,7 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.ViewHolder> 
         private TextView mTextTitle;
         private RecyclerView mRecycleSong;
         private SongsAdapter mSongsAdapter;
+        private ImageView mImageMore;
         private OnClickListenerGenre mClickListenerGenre;
 
         public ViewHolder(View rootView, OnClickListenerGenre listener) {
@@ -61,8 +63,10 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.ViewHolder> 
             mClickListenerGenre = listener;
             mTextTitle = rootView.findViewById(R.id.text_title_genre);
             mRecycleSong = rootView.findViewById(R.id.recycle_song);
+            mImageMore = rootView.findViewById(R.id.image_icon_more);
             mSongsAdapter = new SongsAdapter(new ArrayList<Song>());
             initRecycleView(mRecycleSong, mSongsAdapter);
+            mImageMore.setOnClickListener(this);
         }
 
         public void setData(Genre genre) {
@@ -76,8 +80,15 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.ViewHolder> 
 
         @Override
         public void onClick(View v) {
-            if (v == mTextTitle) {
-                mClickListenerGenre.onGenreClicked(getAdapterPosition());
+            switch (v.getId()) {
+                case R.id.image_icon_more: {
+                    mClickListenerGenre.onGenreClicked(getAdapterPosition());
+                    break;
+                }
+                case R.id.text_title_genre: {
+                    mClickListenerGenre.onGenreClicked(getAdapterPosition());
+                    break;
+                }
             }
         }
 
