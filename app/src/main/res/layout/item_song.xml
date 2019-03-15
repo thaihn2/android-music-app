@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="@dimen/item_song_width"
+    android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/item_song_padding">
+
+    <ImageView
+        android:id="@+id/image_avatar"
+        android:layout_width="@dimen/item_song_avatar_width"
+        android:layout_height="@dimen/item_song_avatar_height"
+        android:layout_marginRight="@dimen/item_song_padding"
+        android:src="@drawable/ic_loading"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/item_song_margin_top"
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:freezesText="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/item_song_text_size_name"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/image_icon_more"
+        app:layout_constraintTop_toBottomOf="@id/image_avatar" />
+
+    <ImageView
+        android:id="@+id/image_icon_more"
+        android:layout_width="@dimen/item_song_height_icon"
+        android:layout_height="@dimen/item_song_width_icon"
+        android:layout_marginTop="@dimen/item_song_margin_top"
+        android:src="@drawable/ic_more_vert_black_24dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/image_avatar" />
+
+    <TextView
+        android:id="@+id/text_singer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/item_song_padding"
+        android:layout_marginTop="@dimen/item_song_margin_top"
+        android:singleLine="true"
+        android:textColor="@color/color_mine_shaft"
+        android:textSize="@dimen/item_song_text_size_singer"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_name" />
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/item_song_offline_padding"
+    android:background="@drawable/background_item_genre"
+    android:padding="@dimen/item_song_offline_padding">
+
+    <com.framgia.thaihn.tmusic.widget.CircleImageView
+        android:id="@+id/image_avatar_offline"
+        android:layout_width="@dimen/item_song_offline_width_image"
+        android:layout_height="@dimen/item_song_offline_width_image"
+        android:padding="@dimen/item_song_offline_padding_image"
+        android:src="@drawable/ic_loading"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/smart_player_padding_left"
+        android:layout_marginRight="@dimen/smart_player_margin_right"
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:freezesText="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/item_song_text_size_name"
+        app:layout_constraintEnd_toStartOf="@id/image_more"
+        app:layout_constraintStart_toEndOf="@id/image_avatar_offline"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_singer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/smart_player_padding_left"
+        android:layout_marginRight="@dimen/smart_player_margin_right"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:singleLine="true"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/item_song_text_size_singer"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/image_more"
+        app:layout_constraintStart_toEndOf="@id/image_avatar_offline"
+        app:layout_constraintTop_toBottomOf="@+id/text_name_song" />
+
+    <ImageView
+        android:id="@+id/image_more"
+        android:layout_width="@dimen/item_song_offline_width_icon_more"
+        android:layout_height="@dimen/item_song_offline_width_icon_more"
+        android:padding="@dimen/item_song_offline_padding_icon_more"
+        android:src="@drawable/ic_more_vert_black_24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</android.support.constraint.ConstraintLayout>
+

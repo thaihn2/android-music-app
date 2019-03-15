@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">TMusic</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_tab_home">Home</string>
+    <string name="title_tab_personal">Personal</string>
+    <string name="time_default">00:00</string>
+    <string name="error_first_of_list_song">You\'re first of list</string>
+    <string name="error_end_of_list_song">You\'re end of list</string>
+    <string name="error_can_not_load_list_song">Can\'t load your list song</string>
+    <string name="str_can_not_download">The song can\'t not download</string>
+    <string name="error_can_not_load_song_offline">Can\'t load music from SD-Card</string>
+    <string name="error_get_song_from_sd_card">Can\'t get song from SD Card</string>
+    <string name="str_hint_search_view">Enter text in here</string>
+    <string name="error_no_internet">Connect internet to continue</string>
+    <string name="str_downloading">Downloading</string>
+    <string name="str_download_complete">Download complete</string>
+    <string name="str_download_error">Download fail</string>
+    <string name="str_rate_me">Rate</string>
+    <string name="str_unknow"><![CDATA[<unknown>]]></string>
+    <string name="str_no_data">No data!</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_download">Download</string>
+    <string name="str_text_splash">TMusic</string>
+</resources>

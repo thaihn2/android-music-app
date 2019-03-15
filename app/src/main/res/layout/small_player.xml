@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="?actionBarSize"
+    android:background="@color/color_chocolate"
+    android:padding="@dimen/smart_player_padding_left">
+
+    <com.framgia.thaihn.tmusic.widget.CircleImageView
+        android:id="@+id/image_avatar"
+        android:layout_width="?actionBarSize"
+        android:layout_height="?actionBarSize"
+        android:padding="@dimen/smart_key_padding_image"
+        android:src="@drawable/ic_loading"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/smart_player_padding_left"
+        android:layout_marginRight="@dimen/smart_player_margin_right"
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:freezesText="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/item_song_text_size_name"
+        app:layout_constraintEnd_toStartOf="@id/image_previous"
+        app:layout_constraintStart_toEndOf="@id/image_avatar" />
+
+    <TextView
+        android:id="@+id/text_singer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/smart_player_padding_left"
+        android:layout_marginRight="@dimen/smart_player_margin_right"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:singleLine="true"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/item_song_text_size_singer"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/image_previous"
+        app:layout_constraintStart_toEndOf="@id/image_avatar"
+        app:layout_constraintTop_toBottomOf="@+id/text_name_song" />
+
+
+    <ImageView
+        android:id="@+id/image_previous"
+        android:layout_width="@dimen/smart_key_width_icon"
+        android:layout_height="@dimen/smart_key_width_icon"
+        android:layout_marginRight="@dimen/smart_player_margin_right"
+        android:padding="@dimen/smart_key_padding_image"
+        android:src="@drawable/ic_previous_white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/image_play"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/image_play"
+        android:layout_width="@dimen/smart_key_width_icon"
+        android:layout_height="@dimen/smart_key_width_icon"
+        android:layout_marginLeft="@dimen/smart_player_padding_left"
+        android:layout_marginRight="@dimen/smart_player_margin_right"
+        android:padding="@dimen/smart_key_padding_image"
+        android:src="@drawable/ic_media_play_symbol_white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/image_next"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/image_next"
+        android:layout_width="@dimen/smart_key_width_icon"
+        android:layout_height="@dimen/smart_key_width_icon"
+        android:layout_marginLeft="@dimen/smart_player_padding_left"
+        android:padding="@dimen/smart_key_padding_image"
+        android:src="@drawable/ic_next_white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</android.support.constraint.ConstraintLayout>

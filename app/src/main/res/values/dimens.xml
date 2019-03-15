@@ -1,0 +1,53 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="nav_header_vertical_spacing">8dp</dimen>
+    <dimen name="nav_header_height">160dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="nav_header_height_avatar">100dp</dimen>
+    <dimen name="nav_header_width_avatar">100dp</dimen>
+
+    <dimen name="item_song_padding">12dp</dimen>
+    <dimen name="item_song_width">130dp</dimen>
+    <dimen name="item_song_avatar_width">110dp</dimen>
+    <dimen name="item_song_avatar_height">110dp</dimen>
+    <dimen name="item_song_margin_top">5dp</dimen>
+    <dimen name="item_song_height_icon">24dp</dimen>
+    <dimen name="item_song_width_icon">24dp</dimen>
+    <dimen name="item_song_text_size_name">16sp</dimen>
+    <dimen name="item_song_text_size_singer">15sp</dimen>
+
+    <dimen name="item_genre_margin">10dp</dimen>
+    <dimen name="item_genre_elevation">5dp</dimen>
+    <dimen name="item_genre_corner">5dp</dimen>
+    <dimen name="item_genre_padding">12dp</dimen>
+    <dimen name="item_genre_text_size_title">25sp</dimen>
+
+    <dimen name="detail_width_image">200dp</dimen>
+    <dimen name="detail_margin_left">24dp</dimen>
+    <dimen name="detail_margin_top">16dp</dimen>
+    <dimen name="detail_width_icon">48dp</dimen>
+    <dimen name="detail_padding_image">10dp</dimen>
+    <dimen name="detail_margin_bottom">16dp</dimen>
+    <dimen name="detail_padding_image_back">16dp</dimen>
+    <dimen name="details_margin_right">10dp</dimen>
+    <dimen name="detail_margin_top_5dp">5dp</dimen>
+    <dimen name="detail_margin_left_image_avatar">32dp</dimen>
+
+    <dimen name="smart_player_padding_left">10dp</dimen>
+    <dimen name="smart_key_width_icon">36dp</dimen>
+    <dimen name="detail_text_size_time">15sp</dimen>
+    <dimen name="smart_key_padding_image">8dp</dimen>
+    <dimen name="smart_player_margin_right">10dp</dimen>
+
+    <dimen name="item_song_offline_width_icon_more">42dp</dimen>
+    <dimen name="item_song_offline_padding_icon_more">6dp</dimen>
+    <dimen name="item_song_offline_padding">8dp</dimen>
+    <dimen name="item_song_offline_width_image">60dp</dimen>
+    <dimen name="item_song_offline_padding_image">5dp</dimen>
+
+    <dimen name="padding_bottom_home">60dp</dimen>
+    <dimen name="detail_max_height_seek_bar">1.5dp</dimen>
+    <dimen name="item_search_margin_top">10dp</dimen>
+</resources>
